@@ -469,22 +469,22 @@ const Survey = () => {
                     </div>
 
                     {/* Dynamic Gift Card - Made bigger */}
-                    <div className={`${currentBrand.color} text-white p-8 rounded-lg mb-6`}>
+                    <div className={`${currentBrand.color} text-white p-10 rounded-lg mb-6`}>
                       <div className="flex justify-between items-center">
                         <div>
-                          <div className="mb-3">
+                          <div className="mb-4">
                             <img 
                               src={brandLogos[selectedBrand]} 
                               alt={currentBrand.name}
-                              className="h-8 max-w-[120px] object-contain filter brightness-0 invert"
+                              className="h-10 max-w-[140px] object-contain filter brightness-0 invert"
                             />
                           </div>
-                          <div className="text-sm">{currentBrand.website}</div>
-                          <div className="text-xs mt-2">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
+                          <div className="text-base">{currentBrand.website}</div>
+                          <div className="text-sm mt-3">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-white text-sm">Geschenkkarte</div>
-                          <div className="text-white font-bold text-4xl">50€</div>
+                          <div className="text-white text-base">Geschenkkarte</div>
+                          <div className="text-white font-bold text-5xl">50€</div>
                         </div>
                       </div>
                     </div>
@@ -524,7 +524,8 @@ const Survey = () => {
                     <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <RadioGroupItem value="email" id="email-option" className="border-gray-400" disabled />
+                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
+                          </div>
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
@@ -543,12 +544,15 @@ const Survey = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <RadioGroupItem 
-                            value="home" 
-                            id="home-option" 
-                            className={selectedDelivery === 'home' ? 'border-pink-600 text-pink-600' : 'border-gray-400'}
-                            checked={selectedDelivery === 'home'}
-                          />
+                          <div className={`w-5 h-5 border-2 rounded-full bg-white flex items-center justify-center ${
+                            selectedDelivery === 'home' 
+                              ? 'border-pink-600' 
+                              : 'border-gray-400'
+                          }`}>
+                            {selectedDelivery === 'home' && (
+                              <div className="w-2.5 h-2.5 bg-pink-600 rounded-full"></div>
+                            )}
+                          </div>
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">🏠 Heimversand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
@@ -583,7 +587,7 @@ const Survey = () => {
                         >
                           <div className="flex items-center space-x-3">
                             <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
-                              selectedAddress === 'meine' ? 'bg-pink-600' : ''
+                              selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
                             } flex items-center justify-center`}>
                               {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                             </div>
@@ -597,7 +601,7 @@ const Survey = () => {
                         {/* Grayed out "andere Person" option - not selectable */}
                         <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
                           <div className="flex items-center space-x-3">
-                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
+                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-gray-200"></div>
                             <div className="text-left">
                               <div className="font-semibold text-gray-500">👥 Adresse einer anderen Person</div>
                               <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
