@@ -247,14 +247,16 @@ const Survey = () => {
         </div>
         
         {/* Main header */}
-        <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center justify-between w-full">
               <div className="flex items-center space-x-8">
-                <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">T</span>
-                </div>
+                <img 
+                  src="/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png" 
+                  alt="Telekom" 
+                  className="w-8 h-8 object-contain"
+                />
                 <nav className="flex space-x-6">
                   <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
                   <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Mobilfunk</span>
@@ -266,11 +268,14 @@ const Survey = () => {
                 </nav>
               </div>
               <div className="flex items-center space-x-4">
-                <Search className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
-                <Phone className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
-                <ShoppingCart className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <Search className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <div className="w-5 h-5 border border-gray-600 rounded cursor-pointer hover:border-pink-600">
+                  <Phone className="w-3 h-3 text-gray-600 m-0.5" />
+                </div>
+                <Phone className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
                 <div className="relative">
-                  <User className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
               </div>
@@ -278,11 +283,16 @@ const Survey = () => {
 
             {/* Mobile Layout */}
             <div className="flex md:hidden items-center justify-between w-full">
-              <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
-              </div>
+              <img 
+                src="/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png" 
+                alt="Telekom" 
+                className="w-8 h-8 object-contain"
+              />
               <div className="flex items-center space-x-4">
                 <Search className="w-6 h-6 text-gray-600" />
+                <div className="w-6 h-6 border border-gray-600 rounded cursor-pointer">
+                  <Phone className="w-4 h-4 text-gray-600 m-0.5" />
+                </div>
                 <Phone className="w-6 h-6 text-gray-600" />
                 <ShoppingCart className="w-6 h-6 text-gray-600" />
                 <div className="relative">
