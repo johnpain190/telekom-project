@@ -468,35 +468,23 @@ const Survey = () => {
                       ))}
                     </div>
 
-                    {/* Dynamic Gift Card */}
-                    <div className={`${currentBrand.color} text-white p-6 rounded-lg`}>
+                    {/* Dynamic Gift Card - Made bigger */}
+                    <div className={`${currentBrand.color} text-white p-8 rounded-lg mb-6`}>
                       <div className="flex justify-between items-center">
                         <div>
-                          <div className="mb-2">
-                            {selectedBrand === 'telekom' ? (
-                              <div className="w-10 h-10 bg-white rounded flex items-center justify-center">
-                                <img 
-                                  src={brandLogos.telekom} 
-                                  alt="Telekom" 
-                                  className="w-6 h-6 brightness-0"
-                                />
-                              </div>
-                            ) : (
-                              <div className="bg-white p-2 rounded inline-block">
-                                <img 
-                                  src={brandLogos[selectedBrand]} 
-                                  alt={currentBrand.name}
-                                  className="h-6 max-w-[80px] object-contain brightness-0"
-                                />
-                              </div>
-                            )}
+                          <div className="mb-3">
+                            <img 
+                              src={brandLogos[selectedBrand]} 
+                              alt={currentBrand.name}
+                              className="h-8 max-w-[120px] object-contain filter brightness-0 invert"
+                            />
                           </div>
                           <div className="text-sm">{currentBrand.website}</div>
                           <div className="text-xs mt-2">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
                         </div>
                         <div className="text-right">
                           <div className="text-white text-sm">Geschenkkarte</div>
-                          <div className="text-white font-bold text-3xl">50€</div>
+                          <div className="text-white font-bold text-4xl">50€</div>
                         </div>
                       </div>
                     </div>
@@ -533,18 +521,17 @@ const Survey = () => {
                     )}
 
                     {/* Email Option (Clickable but shows error) */}
-                    <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-gray-50 opacity-75 relative cursor-pointer" onClick={handleEmailClick}>
+                    <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
-                            <div className="w-2.5 h-2.5 bg-gray-400 rounded-full opacity-50"></div>
                           </div>
                           <div className="text-left">
-                            <div className="font-semibold text-gray-600">📧 E-Mail-Versand</div>
-                            <div className="text-sm text-gray-500">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
+                            <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
+                            <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
                           </div>
                         </div>
-                        <div className="text-gray-500 font-semibold line-through">Kostenlos</div>
+                        <div className="text-green-600 font-semibold">Kostenlos</div>
                       </div>
                     </div>
 
