@@ -247,16 +247,14 @@ const Survey = () => {
         </div>
         
         {/* Main header */}
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
             {/* Desktop Layout */}
-            <div className="hidden md:flex items-center justify-between w-full">
-              <div className="flex items-center space-x-8">
-                <img 
-                  src="/lovable-uploads/634f393d-6178-497e-9941-dea8c9f679df.png" 
-                  alt="Telekom" 
-                  className="w-8 h-8 object-contain"
-                />
+            <div className="hidden md:flex items-center justify-between w-full h-full">
+              <div className="flex items-center space-x-8 h-full">
+                <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-2xl">T</span>
+                </div>
                 <nav className="flex space-x-6">
                   <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
                   <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Mobilfunk</span>
@@ -282,12 +280,10 @@ const Survey = () => {
             </div>
 
             {/* Mobile Layout */}
-            <div className="flex md:hidden items-center justify-between w-full">
-              <img 
-                src="/lovable-uploads/634f393d-6178-497e-9941-dea8c9f679df.png" 
-                alt="Telekom" 
-                className="w-8 h-8 object-contain"
-              />
+            <div className="flex md:hidden items-center justify-between w-full h-full">
+              <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
+                <span className="text-white font-bold text-2xl">T</span>
+              </div>
               <div className="flex items-center space-x-4">
                 <Search className="w-6 h-6 text-gray-600" />
                 <div className="w-6 h-6 border border-gray-600 rounded cursor-pointer">
