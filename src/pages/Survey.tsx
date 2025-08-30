@@ -253,7 +253,11 @@ const Survey = () => {
             <div className="hidden md:flex items-center justify-between w-full h-full">
               <div className="flex items-center space-x-8 h-full">
                 <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-2xl">T</span>
+                  <img 
+                    src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
+                    alt="Telekom" 
+                    className="w-8 h-8 object-contain"
+                  />
                 </div>
                 <nav className="flex space-x-6">
                   <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
@@ -282,7 +286,11 @@ const Survey = () => {
             {/* Mobile Layout */}
             <div className="flex md:hidden items-center justify-between w-full h-full">
               <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">T</span>
+                <img 
+                  src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
+                  alt="Telekom" 
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <div className="flex items-center space-x-4">
                 <Search className="w-6 h-6 text-gray-600" />
