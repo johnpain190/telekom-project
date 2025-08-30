@@ -524,8 +524,7 @@ const Survey = () => {
                     <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
-                          </div>
+                          <RadioGroupItem value="email" id="email-option" className="border-gray-400" disabled />
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
@@ -544,15 +543,12 @@ const Survey = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-6 h-6 border-2 rounded-full flex items-center justify-center ${
-                            selectedDelivery === 'home' 
-                              ? 'border-pink-600 bg-white' 
-                              : 'border-gray-400 bg-white'
-                          }`}>
-                            {selectedDelivery === 'home' && (
-                              <div className="w-3 h-3 bg-pink-600 rounded-full"></div>
-                            )}
-                          </div>
+                          <RadioGroupItem 
+                            value="home" 
+                            id="home-option" 
+                            className={selectedDelivery === 'home' ? 'border-pink-600 text-pink-600' : 'border-gray-400'}
+                            checked={selectedDelivery === 'home'}
+                          />
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">🏠 Heimversand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
