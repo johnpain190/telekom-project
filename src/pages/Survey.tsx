@@ -90,6 +90,13 @@ const Survey = () => {
         'Soziale Medien',
         'Ich möchte keine Werbung erhalten'
       ]
+    },
+    {
+      id: 'overall-experience',
+      title: 'Wie würden Sie Ihre gesamte Erfahrung mit T-Online bewerten?',
+      subtitle: '(1 = Sehr schlecht, 5 = Ausgezeichnet)',
+      type: 'star-rating',
+      options: []
     }
   ];
 
