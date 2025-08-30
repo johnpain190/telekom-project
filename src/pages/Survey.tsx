@@ -5,6 +5,16 @@ import { Label } from '@/components/ui/label';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import hmLogo from '@/assets/hm-logo.png';
 
+// Brand logo URLs
+const brandLogos = {
+  otto: '/lovable-uploads/37661bc2-befd-4af2-a40d-2b2eab85905b.png',
+  amazon: '/lovable-uploads/5706dc74-fbd3-4509-bd70-be7ece552da4.png',
+  hm: '/lovable-uploads/437a259c-aa7a-451b-bd9c-16578a6176bf.png',
+  zalando: '/lovable-uploads/7ab6f500-1d20-4002-bf77-28e37b63038a.png',
+  douglas: '/lovable-uploads/95dd02e6-344d-4f50-84af-f025c870e6d4.png',
+  telekom: '/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png'
+};
+
 const Survey = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
@@ -445,25 +455,14 @@ const Survey = () => {
                           }`}
                         >
                           <div className="text-center">
-                            {item.brand === 'otto' && (
-                              <div className="text-red-600 font-bold text-xl">OTTO</div>
-                            )}
-                            {item.brand === 'amazon' && (
-                              <div className="font-bold text-xl">amazon.de</div>
-                            )}
-                            {item.brand === 'hm' && (
-                              <img src={hmLogo} alt="H&M" className="h-8 mx-auto mb-1" />
-                            )}
-                            {item.brand === 'douglas' && (
-                              <div className="font-bold text-xl">DOUGLAS</div>
-                            )}
-                            {item.brand === 'telekom' && (
-                              <div className="text-pink-600 font-bold text-xl">T</div>
-                            )}
-                            {item.brand === 'zalando' && (
-                              <div className="text-orange-500 font-bold text-xl">🧡 zalando</div>
-                            )}
-                            <div className="text-sm text-gray-600 mt-2">{item.name}</div>
+                            <div className="h-8 flex items-center justify-center mb-2">
+                              <img 
+                                src={brandLogos[item.brand]} 
+                                alt={item.name}
+                                className="h-8 max-w-[100px] object-contain"
+                              />
+                            </div>
+                            <div className="text-sm text-gray-600">{item.name}</div>
                           </div>
                         </button>
                       ))}
@@ -473,8 +472,20 @@ const Survey = () => {
                     <div className={`${currentBrand.color} text-white p-6 rounded-lg`}>
                       <div className="flex justify-between items-center">
                         <div>
-                          <div className="text-white font-bold text-lg mb-1">
-                            {selectedBrand === 'telekom' ? 'T' : currentBrand.name}
+                          <div className="mb-2">
+                            {selectedBrand === 'telekom' ? (
+                              <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
+                                <img src={brandLogos.telekom} alt="Telekom" className="w-6 h-6" />
+                              </div>
+                            ) : (
+                              <div className="bg-white p-2 rounded inline-block">
+                                <img 
+                                  src={brandLogos[selectedBrand]} 
+                                  alt={currentBrand.name}
+                                  className="h-6 max-w-[80px] object-contain"
+                                />
+                              </div>
+                            )}
                           </div>
                           <div className="text-sm">{currentBrand.website}</div>
                           <div className="text-xs mt-2">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
