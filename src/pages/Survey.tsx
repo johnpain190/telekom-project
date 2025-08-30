@@ -474,15 +474,19 @@ const Survey = () => {
                         <div>
                           <div className="mb-2">
                             {selectedBrand === 'telekom' ? (
-                              <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-                                <img src={brandLogos.telekom} alt="Telekom" className="w-6 h-6" />
+                              <div className="w-10 h-10 bg-white rounded flex items-center justify-center">
+                                <img 
+                                  src={brandLogos.telekom} 
+                                  alt="Telekom" 
+                                  className="w-6 h-6 brightness-0"
+                                />
                               </div>
                             ) : (
                               <div className="bg-white p-2 rounded inline-block">
                                 <img 
                                   src={brandLogos[selectedBrand]} 
                                   alt={currentBrand.name}
-                                  className="h-6 max-w-[80px] object-contain"
+                                  className="h-6 max-w-[80px] object-contain brightness-0"
                                 />
                               </div>
                             )}
@@ -529,42 +533,45 @@ const Survey = () => {
                     )}
 
                     {/* Email Option (Clickable but shows error) */}
-                    <button 
-                      onClick={handleEmailClick}
-                      className="w-full border border-gray-300 rounded-lg p-4 mb-4 hover:border-red-300 transition-colors"
-                    >
+                    <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-gray-50 opacity-75 relative cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
+                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
+                            <div className="w-2.5 h-2.5 bg-gray-400 rounded-full opacity-50"></div>
+                          </div>
                           <div className="text-left">
-                            <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
-                            <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
+                            <div className="font-semibold text-gray-600">📧 E-Mail-Versand</div>
+                            <div className="text-sm text-gray-500">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
                           </div>
                         </div>
-                        <div className="text-green-600 font-semibold">Kostenlos</div>
+                        <div className="text-gray-500 font-semibold line-through">Kostenlos</div>
                       </div>
-                    </button>
+                    </div>
 
                     {/* Home Delivery Option */}
                     <button 
                       onClick={handleHomeSelect}
-                      className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors ${
-                        selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
+                      className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors relative ${
+                        selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
-                            selectedDelivery === 'home' ? 'bg-pink-600' : ''
-                          } flex items-center justify-center`}>
-                            {selectedDelivery === 'home' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                          <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
+                            selectedDelivery === 'home' 
+                              ? 'border-pink-600 bg-pink-600' 
+                              : 'border-gray-400 bg-white'
+                          }`}>
+                            {selectedDelivery === 'home' && (
+                              <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+                            )}
                           </div>
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">🏠 Heimversand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
                           </div>
                         </div>
-                        <div className="font-semibold">+1.95€</div>
+                        <div className="font-semibold text-gray-800">+1.95€</div>
                       </div>
                     </button>
 
