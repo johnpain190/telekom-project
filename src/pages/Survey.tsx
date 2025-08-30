@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, Search, Phone, ShoppingCart, User, Menu } from 'lucide-react';
 import hmLogo from '@/assets/hm-logo.png';
 
 // Brand logo URLs
@@ -232,10 +232,11 @@ const Survey = () => {
     <div className="min-h-screen" style={{ backgroundColor: '#f5f5f5' }}>
       {/* Header */}
       <header className="bg-white shadow-sm">
-        <div className="bg-pink-600 text-white px-4 py-2 text-sm">
+        {/* Top pink bar - hidden on mobile */}
+        <div className="bg-pink-600 text-white px-4 py-2 text-sm hidden md:block">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex space-x-6">
-              <span>Privatkunden</span>
+              <span className="font-medium">Privatkunden</span>
               <span className="text-pink-200">Geschäftskunden</span>
             </div>
             <div className="flex space-x-6">
@@ -245,21 +246,51 @@ const Survey = () => {
           </div>
         </div>
         
+        {/* Main header */}
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <div className="w-12 h-12 bg-pink-600 rounded flex items-center justify-center">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center justify-between w-full">
+              <div className="flex items-center space-x-8">
+                <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">T</span>
+                </div>
+                <nav className="flex space-x-6">
+                  <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Mobilfunk</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Internet</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">TV</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">MeinMagenta App</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Glasfaser</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Service</span>
+                </nav>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Search className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <Phone className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <ShoppingCart className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <div className="relative">
+                  <User className="w-6 h-6 text-gray-600 cursor-pointer hover:text-pink-600" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="flex md:hidden items-center justify-between w-full">
+              <div className="w-8 h-8 bg-pink-600 rounded flex items-center justify-center">
                 <span className="text-white font-bold text-xl">T</span>
               </div>
-              <nav className="flex space-x-6">
-                <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
-                <span className="text-gray-600">Mobilfunk</span>
-                <span className="text-gray-600">Internet</span>
-                <span className="text-gray-600">TV</span>
-                <span className="text-gray-600">MeinMagenta App</span>
-                <span className="text-gray-600">Glasfaser</span>
-                <span className="text-gray-600">Service</span>
-              </nav>
+              <div className="flex items-center space-x-4">
+                <Search className="w-6 h-6 text-gray-600" />
+                <Phone className="w-6 h-6 text-gray-600" />
+                <ShoppingCart className="w-6 h-6 text-gray-600" />
+                <div className="relative">
+                  <User className="w-6 h-6 text-gray-600" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <Menu className="w-6 h-6 text-gray-600" />
+              </div>
             </div>
           </div>
         </div>
