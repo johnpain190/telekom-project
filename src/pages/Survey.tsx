@@ -176,15 +176,16 @@ const Survey = () => {
     const currentRating = parseInt(answers[questionId] || '0');
     
     return (
-      <div className="flex justify-center items-center space-x-2 my-8">
+      <div className="flex justify-center items-center space-x-2 sm:space-x-3 my-6 sm:my-8">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
             onClick={() => handleStarRating(questionId, star)}
-            className="transition-colors duration-200"
+            className="transition-colors duration-200 active:scale-95 p-1"
+            aria-label={`${star} von 5 Sternen`}
           >
             <Star
-              className={`w-8 h-8 ${
+              className={`w-6 h-6 sm:w-8 sm:h-8 ${
                 star <= currentRating
                   ? 'fill-pink-600 text-pink-600'
                   : 'fill-gray-200 text-gray-200'
@@ -201,12 +202,12 @@ const Survey = () => {
       <RadioGroup
         value={answers[questionId] || ''}
         onValueChange={(value) => handleRadioChange(questionId, value)}
-        className="space-y-4 my-8"
+        className="space-y-3 sm:space-y-4 my-6 sm:my-8"
       >
         {options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-3">
-            <RadioGroupItem value={option} id={`${questionId}-${index}`} />
-            <Label htmlFor={`${questionId}-${index}`} className="text-gray-700 cursor-pointer">
+          <div key={index} className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50 transition-colors">
+            <RadioGroupItem value={option} id={`${questionId}-${index}`} className="shrink-0" />
+            <Label htmlFor={`${questionId}-${index}`} className="text-gray-700 cursor-pointer text-sm sm:text-base leading-relaxed">
               {option}
             </Label>
           </div>
@@ -236,12 +237,12 @@ const Survey = () => {
         <div className="bg-pink-600 text-white px-4 py-2 text-sm hidden md:block">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex space-x-6">
-              <span className="font-medium">Privatkunden</span>
-              <span className="text-pink-200">Geschäftskunden</span>
+              <span className="font-medium text-white">Privatkunden</span>
+              <span className="text-pink-200 hover:text-white cursor-pointer">Geschäftskunden</span>
             </div>
             <div className="flex space-x-6">
-              <span>Telekom Shops</span>
-              <span>Kontakt</span>
+              <span className="hover:text-pink-200 cursor-pointer">Telekom Shops</span>
+              <span className="hover:text-pink-200 cursor-pointer">Kontakt</span>
             </div>
           </div>
         </div>
@@ -251,33 +252,33 @@ const Survey = () => {
           <div className="flex items-center justify-between h-16">
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center justify-between w-full h-full">
-              <div className="flex items-center space-x-8 h-full">
-                <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
+              <div className="flex items-center space-x-6 xl:space-x-8 h-full">
+                <div className="h-full w-16 bg-pink-600 flex items-center justify-center shrink-0">
                   <img 
                     src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
                     alt="Telekom" 
                     className="w-8 h-8 object-contain"
                   />
                 </div>
-                <nav className="flex space-x-6">
-                  <span className="text-pink-600 font-medium">30 Jahre | Aktionen</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Mobilfunk</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Internet</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">TV</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">MeinMagenta App</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Glasfaser</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer">Service</span>
+                <nav className="flex space-x-4 lg:space-x-6 overflow-x-auto">
+                  <span className="text-pink-600 font-medium whitespace-nowrap">30 Jahre | Aktionen</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Mobilfunk</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Internet</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">TV</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">MeinMagenta App</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Glasfaser</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Service</span>
                 </nav>
               </div>
-              <div className="flex items-center space-x-4">
-                <Search className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
-                <div className="w-5 h-5 border border-gray-600 rounded cursor-pointer hover:border-pink-600">
-                  <Phone className="w-3 h-3 text-gray-600 m-0.5" />
+              <div className="flex items-center space-x-3 lg:space-x-4 shrink-0">
+                <Search className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
+                <div className="w-6 h-6 border border-gray-600 rounded cursor-pointer hover:border-pink-600 transition-colors flex items-center justify-center">
+                  <Phone className="w-3 h-3 text-gray-600" />
                 </div>
-                <Phone className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
-                <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
+                <Phone className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
+                <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
                 <div className="relative">
-                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600" />
+                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
               </div>
@@ -285,25 +286,25 @@ const Survey = () => {
 
             {/* Mobile Layout */}
             <div className="flex md:hidden items-center justify-between w-full h-full">
-              <div className="h-full w-16 bg-pink-600 flex items-center justify-center">
+              <div className="h-full w-16 bg-pink-600 flex items-center justify-center shrink-0">
                 <img 
                   src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
                   alt="Telekom" 
                   className="w-8 h-8 object-contain"
                 />
               </div>
-              <div className="flex items-center space-x-4">
-                <Search className="w-6 h-6 text-gray-600" />
-                <div className="w-6 h-6 border border-gray-600 rounded cursor-pointer">
-                  <Phone className="w-4 h-4 text-gray-600 m-0.5" />
+              <div className="flex items-center space-x-3 shrink-0">
+                <Search className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
+                <div className="w-7 h-7 border border-gray-600 rounded cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-gray-600" />
                 </div>
-                <Phone className="w-6 h-6 text-gray-600" />
-                <ShoppingCart className="w-6 h-6 text-gray-600" />
+                <Phone className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
+                <ShoppingCart className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
                 <div className="relative">
-                  <User className="w-6 h-6 text-gray-600" />
+                  <User className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
-                <Menu className="w-6 h-6 text-gray-600" />
+                <Menu className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
               </div>
             </div>
           </div>
@@ -312,13 +313,15 @@ const Survey = () => {
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-2">
-        <div className="text-sm text-gray-500">
-          Telekom › Unterwegs › <span className="text-pink-600">Aktionen</span>
+        <div className="text-sm text-gray-500 overflow-x-auto whitespace-nowrap">
+          <span className="hover:text-pink-600 cursor-pointer">Telekom</span> › 
+          <span className="hover:text-pink-600 cursor-pointer"> Unterwegs</span> › 
+          <span className="text-pink-600 font-medium"> Aktionen</span>
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-4 md:py-8">
         {/* Processing Screen */}
         {isProcessing && (
           <div className="bg-white rounded-lg shadow-lg overflow-hidden p-8">
@@ -697,24 +700,24 @@ const Survey = () => {
 
         {/* Original Survey Content */}
         {!isProcessing && !showRewards && (
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden mx-2 sm:mx-0">
             {/* Survey Header */}
-            <div className="text-center py-8 px-6">
+            <div className="text-center py-6 sm:py-8 px-4 sm:px-6">
               <div className="flex items-center justify-center mb-4">
-                <span className="text-4xl mr-2">🎉</span>
-                <h1 className="text-2xl font-bold text-gray-800">
+                <span className="text-3xl sm:text-4xl mr-2">🎉</span>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
                   T-Online – 30 Jahre Gemeinsam!
                 </h1>
               </div>
-              <p className="text-pink-600 font-medium">
+              <p className="text-pink-600 font-medium text-sm sm:text-base text-center px-2">
                 Füllen Sie diese kurze Umfrage aus und sichern Sie sich Ihre exklusive Jubiläumsbelohnung!
               </p>
               
               {/* Progress Bar */}
               <div className="mt-6">
-                <div className="flex items-center justify-center mb-2">
-                  <span className="text-sm text-gray-500">Ihre Vorlieben & Ihr Feedback</span>
-                  <span className="ml-auto text-sm text-gray-500">{currentStep} / {totalSteps}</span>
+                <div className="flex items-center justify-between mb-2 text-xs sm:text-sm">
+                  <span className="text-gray-500">Ihre Vorlieben & Ihr Feedback</span>
+                  <span className="text-gray-500 font-medium">{currentStep} / {totalSteps}</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
                   <div 
@@ -726,13 +729,13 @@ const Survey = () => {
             </div>
 
             {/* Question Content */}
-            <div className="px-8 pb-8">
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+            <div className="px-4 sm:px-8 pb-6 sm:pb-8">
+              <div className="mb-6 sm:mb-8">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 text-center">
                   {currentQuestion?.title} <span className="text-red-500">*</span>
                 </h2>
                 {currentQuestion?.subtitle && (
-                  <p className="text-sm text-gray-500">{currentQuestion.subtitle}</p>
+                  <p className="text-sm text-gray-500 text-center">{currentQuestion.subtitle}</p>
                 )}
               </div>
 
@@ -742,18 +745,18 @@ const Survey = () => {
 
               {/* Star Rating Text */}
               {currentQuestion?.type === 'star-rating' && answers[currentQuestion.id] && (
-                <div className="text-center text-sm text-gray-500 mb-6">
+                <div className="text-center text-sm text-gray-500 mb-4 sm:mb-6">
                   {answers[currentQuestion.id]} von 5 Sternen
                 </div>
               )}
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between items-center pt-6">
+              <div className="flex flex-col sm:flex-row justify-between items-center pt-4 sm:pt-6 gap-3 sm:gap-0">
                 <Button
                   variant="ghost"
                   onClick={handleBack}
                   disabled={currentStep === 1}
-                  className="flex items-center space-x-2"
+                  className="flex items-center justify-center space-x-2 w-full sm:w-auto order-2 sm:order-1"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Zurück</span>
@@ -762,7 +765,7 @@ const Survey = () => {
                 {currentStep === totalSteps ? (
                   <Button
                     onClick={handleSubmit}
-                    className="flex items-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6"
+                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2"
                     disabled={!answers[currentQuestion?.id]}
                   >
                     <span>Umfrage absenden</span>
@@ -770,7 +773,7 @@ const Survey = () => {
                 ) : (
                   <Button
                     onClick={handleNext}
-                    className="flex items-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6"
+                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2"
                     disabled={!answers[currentQuestion?.id]}
                   >
                     <span>Weiter</span>
