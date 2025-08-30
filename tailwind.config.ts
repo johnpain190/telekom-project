@@ -28,6 +28,11 @@ export default {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
 				},
+				telekom: {
+					DEFAULT: 'hsl(var(--telekom-magenta))',
+					dark: 'hsl(var(--telekom-dark))',
+					light: 'hsl(var(--telekom-light))'
+				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
