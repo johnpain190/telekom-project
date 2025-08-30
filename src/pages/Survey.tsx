@@ -524,7 +524,7 @@ const Survey = () => {
                     <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
+                          <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
                           </div>
                           <div className="text-left">
                             <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
@@ -544,13 +544,13 @@ const Survey = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center ${
+                          <div className={`w-6 h-6 border-2 rounded-full flex items-center justify-center ${
                             selectedDelivery === 'home' 
-                              ? 'border-pink-600 bg-pink-600' 
+                              ? 'border-pink-600 bg-white' 
                               : 'border-gray-400 bg-white'
                           }`}>
                             {selectedDelivery === 'home' && (
-                              <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+                              <div className="w-3 h-3 bg-pink-600 rounded-full"></div>
                             )}
                           </div>
                           <div className="text-left">
