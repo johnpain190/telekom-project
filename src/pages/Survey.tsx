@@ -253,7 +253,7 @@ const Survey = () => {
             <div className="hidden md:flex items-center justify-between w-full">
               <div className="flex items-center space-x-8">
                 <img 
-                  src="/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png" 
+                  src="/lovable-uploads/634f393d-6178-497e-9941-dea8c9f679df.png" 
                   alt="Telekom" 
                   className="w-8 h-8 object-contain"
                 />
@@ -284,7 +284,7 @@ const Survey = () => {
             {/* Mobile Layout */}
             <div className="flex md:hidden items-center justify-between w-full">
               <img 
-                src="/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png" 
+                src="/lovable-uploads/634f393d-6178-497e-9941-dea8c9f679df.png" 
                 alt="Telekom" 
                 className="w-8 h-8 object-contain"
               />
