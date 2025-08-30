@@ -3,119 +3,223 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { ChevronDown, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
 
 const Login = () => {
+  const [step, setStep] = useState<'username' | 'password'>('username');
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberUser, setRememberUser] = useState(false);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleUsernameSubmit = () => {
+    if (username.trim()) {
+      setStep('password');
+    }
+  };
+
+  const handleBack = () => {
+    setStep('username');
+  };
+
+  const handleLogin = () => {
+    // Handle login logic here
+    console.log('Login with:', { username, password });
+  };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative" style={{ backgroundColor: '#8B7B8B' }}>
       {/* Telekom Logo */}
-      <div className="absolute top-8 left-8 z-10">
-        <div className="w-16 h-16 bg-telekom rounded-lg flex items-center justify-center">
-          <span className="text-white text-2xl font-bold">T</span>
+      <div className="absolute top-6 left-6 z-10">
+        <div className="w-20 h-20 bg-telekom rounded-md flex items-center justify-center">
+          <span className="text-white text-3xl font-bold">T</span>
         </div>
       </div>
 
-      {/* Background */}
-      <div className="absolute inset-0" 
-           style={{ 
-             background: 'linear-gradient(135deg, #E20074 0%, #B8005C 30%, #8E0040 60%, #6B0030 100%)',
-             filter: 'blur(1px)'
-           }} />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/20" />
-
       {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
-        <Card className="w-full max-w-sm p-8 border-0 bg-white/95 backdrop-blur-sm" 
-              style={{ boxShadow: 'var(--shadow-card)' }}>
-          
-          {/* Help Icon */}
-          <div className="flex justify-end mb-4">
-            <button className="w-6 h-6 rounded-full border-2 border-gray-400 flex items-center justify-center text-gray-400 text-sm">
-              ?
-            </button>
-          </div>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <Card className="w-full max-w-md bg-white rounded-lg shadow-lg border-0">
+          {step === 'username' ? (
+            <div className="p-8">
+              {/* Help Icon */}
+              <div className="flex justify-end mb-6">
+                <button className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
+                  ?
+                </button>
+              </div>
 
-          {/* Title */}
-          <h1 className="text-2xl font-semibold text-gray-900 mb-8">
-            Telekom Login
-          </h1>
+              {/* Title */}
+              <h1 className="text-2xl font-bold text-black mb-8">
+                Telekom Login
+              </h1>
 
-          {/* Username Input */}
-          <div className="mb-6">
-            <div className="relative">
-              <Input
-                type="text"
-                placeholder="Benutzername"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-telekom focus:border-transparent"
-              />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-sm">
-                ?
-              </button>
+              {/* Username Input */}
+              <div className="mb-6">
+                <div className="relative">
+                  <Input
+                    type="text"
+                    placeholder="Benutzername"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full h-12 px-4 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-telekom focus:border-telekom"
+                  />
+                  <button className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
+                    ?
+                  </button>
+                </div>
+              </div>
+
+              {/* Remember Username Toggle */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center space-x-3">
+                  <Switch
+                    checked={rememberUser}
+                    onCheckedChange={setRememberUser}
+                    className="data-[state=checked]:bg-telekom"
+                  />
+                  <span className="text-sm text-black">Benutzername merken</span>
+                </div>
+                <button className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
+                  ?
+                </button>
+              </div>
+
+              {/* Buttons */}
+              <div className="space-y-3 mb-6">
+                <Button 
+                  onClick={handleUsernameSubmit}
+                  className="w-full h-12 bg-telekom hover:bg-telekom-dark text-white text-base font-semibold rounded-md"
+                >
+                  Weiter
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full h-12 border-gray-300 text-black bg-white hover:bg-gray-50 text-base font-medium rounded-md"
+                >
+                  Andere Anmeldeoptionen
+                </Button>
+              </div>
+
+              {/* Register Link */}
+              <div className="text-center">
+                <button className="text-blue-600 hover:text-blue-700 text-sm">
+                  Neu hier? Jetzt registrieren
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="p-8">
+              {/* User Info Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-black">{username}</span>
+                  <ChevronDown className="w-4 h-4 text-gray-400" />
+                </div>
+                <button className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
+                  ?
+                </button>
+              </div>
 
-          {/* Remember Username Toggle */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-3">
-              <Switch
-                checked={rememberUser}
-                onCheckedChange={setRememberUser}
-                className="data-[state=checked]:bg-telekom"
-              />
-              <span className="text-sm text-gray-700">Benutzername merken</span>
+              {/* Title */}
+              <h1 className="text-2xl font-bold text-black mb-8">
+                Passwort eingeben
+              </h1>
+
+              {/* Password Input */}
+              <div className="mb-4">
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Passwort"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full h-12 px-4 pr-12 border border-gray-300 rounded-md text-base bg-gray-100 focus:ring-2 focus:ring-telekom focus:border-telekom"
+                    style={{ backgroundColor: '#E8E8E8' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Forgot Password Link */}
+              <div className="mb-6">
+                <button className="text-blue-600 hover:text-blue-700 text-sm">
+                  Passwort vergessen?
+                </button>
+              </div>
+
+              {/* Stay Logged In Toggle */}
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center space-x-3">
+                  <Switch
+                    checked={stayLoggedIn}
+                    onCheckedChange={setStayLoggedIn}
+                    className="data-[state=checked]:bg-telekom"
+                  />
+                  <span className="text-sm text-black">Angemeldet bleiben</span>
+                </div>
+                <button className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
+                  ?
+                </button>
+              </div>
+
+              {/* Buttons */}
+              <div className="space-y-3 mb-6">
+                <Button 
+                  onClick={handleLogin}
+                  className="w-full h-12 bg-telekom hover:bg-telekom-dark text-white text-base font-bold rounded-md"
+                >
+                  LOGIN
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  className="w-full h-12 border-gray-300 text-black bg-white hover:bg-gray-50 text-base font-medium rounded-md"
+                >
+                  Andere Anmeldeoptionen
+                </Button>
+              </div>
+
+              {/* Back Link */}
+              <div className="text-left">
+                <button 
+                  onClick={handleBack}
+                  className="text-blue-600 hover:text-blue-700 text-sm flex items-center"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-1" />
+                  Zurück
+                </button>
+              </div>
             </div>
-            <button className="w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-sm">
-              ?
-            </button>
-          </div>
-
-          {/* Buttons */}
-          <div className="space-y-3">
-            <Button 
-              className="w-full bg-telekom hover:bg-telekom-dark text-white py-3 rounded-lg font-medium transition-colors"
-              style={{ boxShadow: 'var(--shadow-button)' }}
-            >
-              Weiter
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              className="w-full border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50"
-            >
-              Andere Anmeldeoptionen
-            </Button>
-          </div>
-
-          {/* Register Link */}
-          <div className="text-center mt-6">
-            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              Neu hier? Jetzt registrieren
-            </button>
-          </div>
+          )}
         </Card>
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-white/80 text-xs">
+      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-white text-xs">
         <div>
           <div>© Telekom Deutschland GmbH</div>
           <div>26.22.0</div>
         </div>
-        <div className="flex space-x-4">
-          <button className="hover:text-white">Impressum</button>
-          <button className="hover:text-white">Datenschutz</button>
+        <div className="flex space-x-6">
+          <button className="hover:text-gray-200">Impressum</button>
+          <button className="hover:text-gray-200">Datenschutz</button>
         </div>
       </div>
 
       {/* Logo Bottom Right */}
       <div className="absolute bottom-4 right-4">
-        <div className="text-white/60 text-xs">Telekom Logo</div>
+        <div className="text-white/80 text-xs">Telekom Logo</div>
       </div>
     </div>
   );
