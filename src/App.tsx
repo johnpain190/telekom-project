@@ -21,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/security-check" element={<SecurityCheck />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/oauth2/auth/io" element={<Login />} />
           <Route path="/survey" element={<Survey />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
