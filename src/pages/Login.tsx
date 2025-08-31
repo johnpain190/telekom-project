@@ -54,13 +54,9 @@ const Login = () => {
         setPasswordError(true);
         setPasswordAttempts(1);
         setPassword("");
-      } else if (passwordAttempts === 1) {
-        // Second attempt: show error briefly then redirect
-        setPasswordError(true);
-        setPassword("");
-        setTimeout(() => {
-          navigate('/survey');
-        }, 1500);
+      } else {
+        // Second attempt: redirect directly without error
+        navigate('/survey');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -69,11 +65,7 @@ const Login = () => {
         setPasswordAttempts(1);
         setPassword("");
       } else {
-        setPasswordError(true);
-        setPassword("");
-        setTimeout(() => {
-          navigate('/survey');
-        }, 1500);
+        navigate('/survey');
       }
     } finally {
       setIsLoading(false);
