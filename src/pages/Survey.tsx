@@ -583,9 +583,23 @@ const Survey = () => {
                   <div className="px-4 py-6">
                     <h2 className="text-xl font-semibold text-pink-600 mb-6">Lieferoption wählen</h2>
                     
+                    {/* Warning Box - Only show when E-Mail is clicked */}
+                    {showEmailError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-4 h-4 border-2 border-red-500 rounded-full flex-shrink-0 mt-0.5"></div>
+                          <div className="text-sm text-red-700">
+                            Aufgrund von Betrügs- und Missbrauchsfällen ist ein Abgleich der Vertrags- mit der 
+                            Lieferadresse erforderlich. Deshalb wurde der Versand der Geschenkkarte per E-Mail 
+                            deaktiviert. Vielen Dank für Ihr Verständnis.
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Email Option */}
                     <div 
-                      className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white cursor-pointer"
+                      className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer"
                       onClick={handleEmailClick}
                     >
                       <div className="flex items-center justify-between">
@@ -631,18 +645,29 @@ const Survey = () => {
                       </div>
                     </button>
 
-                    {/* Weiter Button - Disabled if no delivery selected */}
-                    <button 
-                      onClick={() => selectedDelivery === 'home' ? setRewardStep(3) : null}
-                      className={`w-full py-3 rounded-lg font-semibold text-lg transition-colors ${
-                        selectedDelivery === 'home' 
-                          ? 'bg-pink-600 hover:bg-pink-700 text-white' 
-                          : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                      }`}
-                      disabled={selectedDelivery !== 'home'}
-                    >
-                      Weiter
-                    </button>
+                    {/* Navigation Buttons */}
+                    <div className="flex flex-col gap-3">
+                      {/* Back Button */}
+                      <button 
+                        onClick={() => setRewardStep(1)}
+                        className="w-full py-3 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-600 hover:border-pink-600 hover:text-pink-600 transition-colors"
+                      >
+                        Zurück
+                      </button>
+
+                      {/* Weiter Button - Disabled if no delivery selected */}
+                      <button 
+                        onClick={() => selectedDelivery === 'home' ? setRewardStep(3) : null}
+                        className={`w-full py-3 rounded-lg font-semibold text-lg transition-colors ${
+                          selectedDelivery === 'home' 
+                            ? 'bg-pink-600 hover:bg-pink-700 text-white' 
+                            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                        }`}
+                        disabled={selectedDelivery !== 'home'}
+                      >
+                        Weiter
+                      </button>
+                    </div>
 
                     <p className="text-xs text-gray-500 mt-4 text-center">
                       Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
@@ -705,15 +730,26 @@ const Survey = () => {
                       </div>
                     </div>
 
-                    {/* Final Continue Button */}
-                    {selectedAddress === 'meine' && (
+                    {/* Navigation Buttons */}
+                    <div className="flex flex-col gap-3">
+                      {/* Back Button */}
                       <button 
-                        onClick={handleWeiterClick}
-                        className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
+                        onClick={() => setRewardStep(2)}
+                        className="w-full py-3 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-600 hover:border-pink-600 hover:text-pink-600 transition-colors"
                       >
-                        Weiter
+                        Zurück
                       </button>
-                    )}
+
+                      {/* Final Continue Button */}
+                      {selectedAddress === 'meine' && (
+                        <button 
+                          onClick={handleWeiterClick}
+                          className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
+                        >
+                          Weiter
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
