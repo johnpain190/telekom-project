@@ -633,42 +633,41 @@ const Survey = () => {
                         </div>
                       </div>
 
-                      {/* Address Options */}
-                      <button
-                        onClick={() => handleAddressSelect('meine')}
-                        className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors touch-manipulation ${
-                          selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-6 h-6 border-2 border-pink-600 rounded-full ${
-                            selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
-                          } flex items-center justify-center`}>
-                            {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                          </div>
-                          <div className="text-left">
-                            <div className="font-semibold text-gray-800 flex items-center">
-                              <span className="mr-2">👤</span>
-                              Meine Adresse
-                            </div>
-                            <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
-                          </div>
-                        </div>
-                      </button>
+                       {/* Address Options */}
+                       <RadioGroup
+                         value={selectedAddress}
+                         onValueChange={(value) => handleAddressSelect(value)}
+                         className="space-y-3"
+                       >
+                         {/* Meine Adresse Option */}
+                         <div 
+                           onClick={() => handleAddressSelect('meine')}
+                           className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 touch-manipulation cursor-pointer"
+                         >
+                           <RadioGroupItem 
+                             value="meine" 
+                             id="meine-adresse-mobile" 
+                             className="mt-0.5 shrink-0" 
+                           />
+                           <div className="flex-1">
+                             <Label htmlFor="meine-adresse-mobile" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                               👤 Meine Adresse
+                             </Label>
+                             <div className="text-sm text-gray-600 mt-1">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
+                           </div>
+                         </div>
 
-                      {/* Grayed out option */}
-                      <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200"></div>
-                          <div className="text-left">
-                            <div className="font-semibold text-gray-500 flex items-center">
-                              <span className="mr-2">👥</span>
-                              Adresse einer anderen Person
-                            </div>
-                            <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
-                          </div>
-                        </div>
-                      </div>
+                         {/* Grayed out option - nicht auswählbar */}
+                         <div className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 bg-gray-100 opacity-60 cursor-not-allowed">
+                           <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200 mt-0.5 shrink-0"></div>
+                           <div className="flex-1">
+                             <div className="font-semibold text-gray-500 flex items-center">
+                               👥 Adresse einer anderen Person
+                             </div>
+                             <div className="text-sm text-gray-400 mt-1">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                           </div>
+                         </div>
+                       </RadioGroup>
                     </>
                   )}
 
@@ -882,34 +881,40 @@ const Survey = () => {
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => handleAddressSelect('meine')}
-                          className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
-                            selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
-                          }`}
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
-                              selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
-                            } flex items-center justify-center`}>
-                              {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                            </div>
-                            <div className="text-left">
-                              <div className="font-semibold text-gray-800">👤 Meine Adresse</div>
-                              <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
-                            </div>
-                          </div>
-                        </button>
+                         <RadioGroup
+                           value={selectedAddress}
+                           onValueChange={(value) => handleAddressSelect(value)}
+                           className="space-y-3"
+                         >
+                           {/* Meine Adresse Option */}
+                           <div 
+                             onClick={() => handleAddressSelect('meine')}
+                             className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 cursor-pointer"
+                           >
+                             <RadioGroupItem 
+                               value="meine" 
+                               id="meine-adresse-desktop" 
+                               className="mt-0.5 shrink-0" 
+                             />
+                             <div className="flex-1">
+                               <Label htmlFor="meine-adresse-desktop" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                                 👤 Meine Adresse
+                               </Label>
+                               <div className="text-sm text-gray-600 mt-1">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
+                             </div>
+                           </div>
 
-                        <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-gray-200"></div>
-                            <div className="text-left">
-                              <div className="font-semibold text-gray-500">👥 Adresse einer anderen Person</div>
-                              <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
-                            </div>
-                          </div>
-                        </div>
+                           {/* Grayed out option - nicht auswählbar */}
+                           <div className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 bg-gray-100 opacity-60 cursor-not-allowed">
+                             <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200 mt-0.5 shrink-0"></div>
+                             <div className="flex-1">
+                               <div className="font-semibold text-gray-500 flex items-center">
+                                 👥 Adresse einer anderen Person
+                               </div>
+                               <div className="text-sm text-gray-400 mt-1">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                             </div>
+                           </div>
+                         </RadioGroup>
 
                         {selectedAddress === 'meine' && (
                           <Button 
