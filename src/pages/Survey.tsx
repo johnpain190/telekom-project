@@ -1056,6 +1056,58 @@ const Survey = () => {
             </p>
           </div>
         </div>
+
+        {/* Direkteinstiege Section */}
+        <div className="bg-pink-600 py-12">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-white text-center mb-12">Direkteinstiege</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+              {/* Smartphones Column */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">Smartphones</h3>
+                <ul className="space-y-3">
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">iPhone 16</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">iPhone 16 Plus</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">iPhone 16 Pro</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">iPhone 16 Pro Max</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Samsung Galaxy S25 Ultra</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Samsung Galaxy Z Flip7</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Xiaomi 15</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Google Pixel 9 Pro</a></li>
+                </ul>
+              </div>
+
+              {/* Tarife Column */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">Tarife</h3>
+                <ul className="space-y-3">
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Handyvertrag</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Young-Tarife</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Prepaid-Tarife</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Datentarife</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Watch- & Tracker-Tarife</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Zusatzkarten</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Unbegrenztes Datenvolumen</a></li>
+                </ul>
+              </div>
+
+              {/* Themen Column */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">Themen</h3>
+                <ul className="space-y-3">
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Handyvergleich</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Kombipaket</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Apple erleben</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Mobilfunk-Netzausbau</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Prepaid-Guthaben aufladen</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Vertragsverlängerung</a></li>
+                  <li><a href="#" className="text-white hover:text-pink-200 transition-colors border-b border-white/20 pb-1 block">Speedtest</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
