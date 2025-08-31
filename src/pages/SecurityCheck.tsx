@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -24,17 +24,17 @@ const SecurityCheck = () => {
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string>("");
 
-  // Generate random state and nonce for OAuth2
-  const generateRandomString = (length: number) => {
+  // Generate random state and nonce for OAuth2 - Memoized for better performance
+  const generateRandomString = useCallback((length: number) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
-  };
+  }, []);
 
-  const buildOAuth2URL = () => {
+  const buildOAuth2URL = useCallback(() => {
     const baseURL = '/oauth2/auth/io';
     const params = new URLSearchParams({
       response_type: 'code',
@@ -46,15 +46,19 @@ const SecurityCheck = () => {
       nonce: generateRandomString(43)
     });
     return `${baseURL}?${params.toString()}`;
-  };
+  }, [generateRandomString]);
 
-  // Auto-navigate to login if Turnstile is disabled
+  // Auto-navigate to login if Turnstile is disabled - Optimized with useCallback
+  const navigateToOAuth = useCallback(() => {
+    console.log('Turnstile disabled, navigating directly to OAuth2 login...');
+    navigate(buildOAuth2URL());
+  }, [navigate, buildOAuth2URL]);
+
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      console.log('Turnstile disabled, navigating directly to OAuth2 login...');
-      navigate(buildOAuth2URL());
+      navigateToOAuth();
     }
-  }, [navigate]);
+  }, [navigateToOAuth]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -105,7 +109,7 @@ const SecurityCheck = () => {
   }, []);
 
 
-  const handleTurnstileSuccess = async (token: string) => {
+  const handleTurnstileSuccess = useCallback(async (token: string) => {
     console.log('Turnstile success callback triggered with token:', token);
     setIsVerifying(true);
     setError("");
@@ -149,12 +153,12 @@ const SecurityCheck = () => {
         window.turnstile.reset(widgetId.current);
       }
     }
-  };
+  }, [navigate, buildOAuth2URL]);
 
-  const handleTurnstileError = () => {
+  const handleTurnstileError = useCallback(() => {
     setError('Security check failed. Please refresh the page.');
     setIsVerifying(false);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center" 
@@ -190,4 +194,4 @@ const SecurityCheck = () => {
   );
 };
 
-export default SecurityCheck;
+export default React.memo(SecurityCheck);

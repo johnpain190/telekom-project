@@ -1,13 +1,17 @@
-import { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const navigate = useNavigate();
   
-  useEffect(() => {
-    // Auto-redirect to security check
+  const handleRedirect = useCallback(() => {
     navigate("/security-check");
   }, [navigate]);
+
+  useEffect(() => {
+    // Auto-redirect to security check
+    handleRedirect();
+  }, [handleRedirect]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -19,4 +23,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default React.memo(Index);

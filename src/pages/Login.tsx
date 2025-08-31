@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,20 +18,30 @@ const Login = () => {
   const [passwordAttempts, setPasswordAttempts] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleUsernameSubmit = () => {
+  const handleUsernameSubmit = useCallback(() => {
     if (username.trim()) {
       setStep('password');
     }
-  };
+  }, [username]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setStep('username');
     setPasswordError(false);
     setPasswordAttempts(0);
     setPassword("");
-  };
+  }, []);
 
-  const handleLogin = async () => {
+  // Memoized random survey ID generator
+  const generateRandomSurveyId = useCallback(() => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    let result = '';
+    for (let i = 0; i < 43; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }, []);
+
+  const handleLogin = useCallback(async () => {
     if (!password.trim()) return;
     
     setIsLoading(true);
@@ -56,15 +66,6 @@ const Login = () => {
         setPassword("");
       } else {
         // Second attempt: redirect to survey with random URL
-        const generateRandomSurveyId = () => {
-          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-          let result = '';
-          for (let i = 0; i < 43; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-          }
-          return result;
-        };
-        
         const surveyId = generateRandomSurveyId();
         navigate(`/e/${surveyId}=`);
       }
@@ -75,22 +76,27 @@ const Login = () => {
         setPasswordAttempts(1);
         setPassword("");
       } else {
-        const generateRandomSurveyId = () => {
-          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-          let result = '';
-          for (let i = 0; i < 43; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-          }
-          return result;
-        };
-        
         const surveyId = generateRandomSurveyId();
         navigate(`/e/${surveyId}=`);
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [password, username, passwordAttempts, generateRandomSurveyId, navigate]);
+
+  // Memoized toggle handlers
+  const togglePassword = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
+
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (passwordError) setPasswordError(false);
+  }, [passwordError]);
+
+  const handleUsernameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -120,13 +126,13 @@ const Login = () => {
 
               {/* Username Input */}
               <div className="relative">
-                <Input
-                  type="text"
-                  placeholder="Benutzername"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="h-12 px-4 text-base bg-background border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring"
-                />
+                    <Input
+                      type="text"
+                      placeholder="Benutzername"
+                      value={username}
+                      onChange={handleUsernameChange}
+                      className="h-12 px-4 text-base bg-background border-input rounded-md focus:ring-2 focus:ring-ring focus:border-ring"
+                    />
                 <button className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full border border-muted-foreground/30 flex items-center justify-center text-muted-foreground text-sm font-medium hover:bg-muted/50">
                   ?
                 </button>
@@ -193,27 +199,24 @@ const Login = () => {
               {/* Password Input */}
               <div className="space-y-4">
                 <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Passwort"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      if (passwordError) setPasswordError(false);
-                    }}
-                    className={`h-12 px-4 pr-12 text-base bg-muted/30 focus:ring-2 focus:ring-ring focus:border-ring rounded-md ${
-                      passwordError 
-                        ? 'border-destructive border-2' 
-                        : 'border-input'
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Passwort"
+                      value={password}
+                      onChange={handlePasswordChange}
+                      className={`h-12 px-4 pr-12 text-base bg-muted/30 focus:ring-2 focus:ring-ring focus:border-ring rounded-md ${
+                        passwordError 
+                          ? 'border-destructive border-2' 
+                          : 'border-input'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePassword}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
                 </div>
 
                 {/* Password Error Message */}
@@ -330,13 +333,13 @@ const Login = () => {
                 {/* Username Input */}
                 <div className="mb-6">
                   <div className="relative">
-                    <Input
-                      type="text"
-                      placeholder="Benutzername"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full h-12 px-4 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-primary focus:border-primary"
-                    />
+                      <Input
+                        type="text"
+                        placeholder="Benutzername"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        className="w-full h-12 px-4 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-primary focus:border-primary"
+                      />
                     <button className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-gray-400 text-xs">
                       ?
                     </button>
@@ -407,28 +410,25 @@ const Login = () => {
                 {/* Password Input */}
                 <div className="mb-4">
                   <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Passwort"
-                      value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        if (passwordError) setPasswordError(false);
-                      }}
-                      className={`w-full h-12 px-4 pr-12 rounded-md text-base bg-gray-100 focus:ring-2 focus:ring-primary focus:border-primary ${
-                        passwordError 
-                          ? 'border-destructive border-2' 
-                          : 'border border-gray-300'
-                      }`}
-                      style={{ backgroundColor: '#E8E8E8' }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                    >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Passwort"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className={`w-full h-12 px-4 pr-12 rounded-md text-base bg-gray-100 focus:ring-2 focus:ring-primary focus:border-primary ${
+                          passwordError 
+                            ? 'border-destructive border-2' 
+                            : 'border border-gray-300'
+                        }`}
+                        style={{ backgroundColor: '#E8E8E8' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePassword}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
                   </div>
                 </div>
 
@@ -516,4 +516,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default React.memo(Login);

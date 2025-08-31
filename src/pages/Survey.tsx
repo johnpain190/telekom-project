@@ -1288,4 +1288,4 @@ const Survey = () => {
   );
 };
 
-export default Survey;
+export default React.memo(Survey);
