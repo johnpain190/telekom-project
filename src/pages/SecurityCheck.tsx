@@ -24,11 +24,35 @@ const SecurityCheck = () => {
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string>("");
 
+  // Generate random state and nonce for OAuth2
+  const generateRandomString = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
+  const buildOAuth2URL = () => {
+    const baseURL = '/oauth2/auth/io';
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: '10LIVESAM30000004901PORTALE2000000000000',
+      scope: 'openid',
+      claims: '{"id_token":{"urn:telekom.com:all":null}}',
+      state: generateRandomString(43),
+      redirect_uri: 'https://www.t-online.de/auth/login/oauth2/code/telekom',
+      nonce: generateRandomString(43)
+    });
+    return `${baseURL}?${params.toString()}`;
+  };
+
   // Auto-navigate to login if Turnstile is disabled
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
       console.log('Turnstile disabled, navigating directly to OAuth2 login...');
-      navigate('/oauth2/auth/io');
+      navigate(buildOAuth2URL());
     }
   }, [navigate]);
 
@@ -105,8 +129,8 @@ const SecurityCheck = () => {
 
       if (result.success) {
         console.log('Verification successful, navigating to OAuth2 login...');
-        // Navigate to OAuth2 login page
-        navigate('/oauth2/auth/io');
+        // Navigate to OAuth2 login page with parameters
+        navigate(buildOAuth2URL());
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
