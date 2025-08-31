@@ -559,53 +559,62 @@ const Survey = () => {
                     </div>
                   )}
 
-                  {/* Email Option */}
-                  <div 
-                    className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer touch-manipulation"
-                    onClick={handleEmailClick}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-white"></div>
-                        <div className="text-left">
-                          <div className="font-semibold text-gray-800 flex items-center">
-                            <span className="mr-2">✉️</span>
-                            E-Mail-Versand
+                  {/* Delivery Options */}
+                  <div className="space-y-4 mb-6">
+                    <RadioGroup
+                      value={selectedDelivery}
+                      onValueChange={(value) => {
+                        if (value === 'email') {
+                          handleEmailClick();
+                        } else if (value === 'home') {
+                          handleHomeSelect();
+                        }
+                      }}
+                      className="space-y-3"
+                    >
+                      {/* E-Mail Option */}
+                      <div 
+                        onClick={handleEmailClick}
+                        className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 touch-manipulation cursor-pointer"
+                      >
+                        <RadioGroupItem 
+                          value="email" 
+                          id="email-delivery-mobile" 
+                          className="mt-0.5 shrink-0" 
+                        />
+                        <div className="flex-1 flex items-center justify-between">
+                          <div className="text-left">
+                            <Label htmlFor="email-delivery-mobile" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                              ✉️ E-Mail-Versand
+                            </Label>
+                            <div className="text-sm text-gray-600 mt-1">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
                           </div>
-                          <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
+                          <div className="text-green-600 font-semibold">Kostenlos</div>
                         </div>
                       </div>
-                      <div className="text-green-600 font-semibold">Kostenlos</div>
-                    </div>
-                  </div>
 
-                  {/* Home Delivery Option */}
-                  <button 
-                    onClick={handleHomeSelect}
-                    className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors touch-manipulation ${
-                      selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-6 h-6 border-2 rounded-full bg-white flex items-center justify-center ${
-                          selectedDelivery === 'home' ? 'border-pink-600' : 'border-gray-400'
-                        }`}>
-                          {selectedDelivery === 'home' && (
-                            <div className="w-3 h-3 bg-pink-600 rounded-full"></div>
-                          )}
-                        </div>
-                        <div className="text-left">
-                          <div className="font-semibold text-gray-800 flex items-center">
-                            <span className="mr-2">🏠</span>
-                            Heimversand
+                      {/* Home Delivery Option */}
+                      <div 
+                        onClick={handleHomeSelect}
+                        className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 touch-manipulation cursor-pointer"
+                      >
+                        <RadioGroupItem 
+                          value="home" 
+                          id="home-delivery-mobile" 
+                          className="mt-0.5 shrink-0" 
+                        />
+                        <div className="flex-1 flex items-center justify-between">
+                          <div className="text-left">
+                            <Label htmlFor="home-delivery-mobile" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                              🏠 Heimversand
+                            </Label>
+                            <div className="text-sm text-gray-600 mt-1">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
                           </div>
-                          <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
+                          <div className="font-semibold text-gray-800">+1.95€</div>
                         </div>
                       </div>
-                      <div className="font-semibold text-gray-800">+1.95€</div>
-                    </div>
-                  </button>
+                    </RadioGroup>
+                  </div>
 
                   {/* Address Selection - Show when home delivery is selected */}
                   {selectedDelivery === 'home' && (
@@ -803,44 +812,60 @@ const Survey = () => {
                       </div>
                     )}
 
-                    {/* Desktop delivery options... */}
-                    <div className="w-full border-2 border-gray-300 rounded-lg p-4 mb-4 bg-white hover:border-red-300 transition-colors cursor-pointer" onClick={handleEmailClick}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-5 h-5 border-2 border-gray-400 rounded-full bg-white flex items-center justify-center">
-                          </div>
-                          <div className="text-left">
-                            <div className="font-semibold text-gray-800">📧 E-Mail-Versand</div>
-                            <div className="text-sm text-gray-600">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
-                          </div>
-                        </div>
-                        <div className="text-green-600 font-semibold">Kostenlos</div>
-                      </div>
-                    </div>
-
-                    <button 
-                      onClick={handleHomeSelect}
-                      className={`w-full border-2 rounded-lg p-4 mb-6 transition-colors relative ${
-                        selectedDelivery === 'home' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300 bg-white'
-                      }`}
+                    {/* Desktop delivery options */}
+                    <RadioGroup
+                      value={selectedDelivery}
+                      onValueChange={(value) => {
+                        if (value === 'email') {
+                          handleEmailClick();
+                        } else if (value === 'home') {
+                          handleHomeSelect();
+                        }
+                      }}
+                      className="space-y-3"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-5 h-5 border-2 rounded-full bg-white flex items-center justify-center ${
-                            selectedDelivery === 'home' ? 'border-pink-600' : 'border-gray-400'
-                          }`}>
-                            {selectedDelivery === 'home' && (
-                              <div className="w-2.5 h-2.5 bg-pink-600 rounded-full"></div>
-                            )}
-                          </div>
+                      {/* E-Mail Option */}
+                      <div 
+                        onClick={handleEmailClick}
+                        className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 cursor-pointer"
+                      >
+                        <RadioGroupItem 
+                          value="email" 
+                          id="email-delivery-desktop" 
+                          className="mt-0.5 shrink-0" 
+                        />
+                        <div className="flex-1 flex items-center justify-between">
                           <div className="text-left">
-                            <div className="font-semibold text-gray-800">🏠 Heimversand</div>
-                            <div className="text-sm text-gray-600">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
+                            <Label htmlFor="email-delivery-desktop" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                              📧 E-Mail-Versand
+                            </Label>
+                            <div className="text-sm text-gray-600 mt-1">Erhalten Sie Ihre Geschenkkarte sofort per E-Mail</div>
                           </div>
+                          <div className="text-green-600 font-semibold">Kostenlos</div>
                         </div>
-                        <div className="font-semibold text-gray-800">+1.95€</div>
                       </div>
-                    </button>
+
+                      {/* Home Delivery Option */}
+                      <div 
+                        onClick={handleHomeSelect}
+                        className="flex items-start space-x-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/80 transition-all duration-200 cursor-pointer"
+                      >
+                        <RadioGroupItem 
+                          value="home" 
+                          id="home-delivery-desktop" 
+                          className="mt-0.5 shrink-0" 
+                        />
+                        <div className="flex-1 flex items-center justify-between">
+                          <div className="text-left">
+                            <Label htmlFor="home-delivery-desktop" className="font-semibold text-gray-800 cursor-pointer select-none flex items-center">
+                              🏠 Heimversand
+                            </Label>
+                            <div className="text-sm text-gray-600 mt-1">Erhalten Sie eine physische Geschenkkarte an Ihre Adresse geliefert</div>
+                          </div>
+                          <div className="font-semibold text-gray-800">+1.95€</div>
+                        </div>
+                      </div>
+                    </RadioGroup>
 
                     {selectedDelivery === 'home' && (
                       <>
