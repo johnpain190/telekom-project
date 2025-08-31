@@ -67,10 +67,12 @@ const SecurityCheck = () => {
   }, []);
 
   const handleTurnstileSuccess = async (token: string) => {
+    console.log('Turnstile success callback triggered with token:', token);
     setIsVerifying(true);
     setError("");
 
     try {
+      console.log('Making API request to verify token...');
       const response = await fetch('https://api.profitsimulator.me/TONLINE/verify-turnstile.php', {
         method: 'POST',
         headers: {
@@ -82,12 +84,16 @@ const SecurityCheck = () => {
         }),
       });
 
+      console.log('API response status:', response.status);
       const result = await response.json();
+      console.log('API response result:', result);
 
       if (result.success) {
+        console.log('Verification successful, navigating to login...');
         // Navigate directly to login page
         navigate('/login');
       } else {
+        console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
         setIsVerifying(false);
         // Reset turnstile
