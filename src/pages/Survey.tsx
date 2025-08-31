@@ -713,14 +713,14 @@ const Survey = () => {
                   <div>
                     <h3 className="text-lg font-semibold text-pink-600 mb-6">Marke auswählen</h3>
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      {[
+                      {([
                         { name: 'Otto.de', brand: 'otto' },
                         { name: 'H&M', brand: 'hm' },
                         { name: 'Amazon', brand: 'amazon' },
                         { name: 'Douglas.de', brand: 'douglas' },
                         { name: 'Telekom', brand: 'telekom' },
                         { name: 'Zalando.de', brand: 'zalando' }
-                      ].map((item) => (
+                      ] as const).map((item) => (
                         <button
                           key={item.brand}
                           onClick={() => handleBrandSelect(item.brand)}
