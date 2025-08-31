@@ -477,18 +477,18 @@ const Survey = () => {
             {/* Mobile Layout */}
             <div className="block md:hidden">
               {/* Step Indicators - Mobile */}
-              <div className="px-4 py-6 bg-gray-50">
-                <div className="flex justify-center space-x-8">
+              <div className="px-4 py-4 bg-gray-50">
+                <div className="flex justify-center space-x-12">
                   {[
                     { step: 1, title: 'Marke\nwählen' },
                     { step: 2, title: 'Lieferoption\nwählen' },
                     { step: 3, title: 'Auswahl\nbestätigen' }
                   ].map((item) => (
                     <div key={item.step} className="flex flex-col items-center">
-                      <div className={`w-10 h-10 ${rewardStep >= item.step ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
+                      <div className={`w-8 h-8 ${rewardStep >= item.step ? 'bg-pink-600 text-white' : 'bg-gray-300 text-gray-600'} rounded-full flex items-center justify-center text-sm font-bold mb-2`}>
                         {item.step}
                       </div>
-                      <span className={`text-xs text-center ${rewardStep >= item.step ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
+                      <span className={`text-xs text-center leading-tight ${rewardStep >= item.step ? 'text-pink-600 font-medium' : 'text-gray-500'}`}>
                         {item.title}
                       </span>
                     </div>
@@ -497,53 +497,47 @@ const Survey = () => {
               </div>
 
               {/* Single Scrolling Page - Mobile */}
-              <div className="px-4 py-6">
+              <div className="px-4 py-4">
                 {/* Brand Selection Section */}
-                <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-pink-600 mb-6">Marke auswählen</h2>
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-pink-600 mb-4">Marke auswählen</h2>
                   
                   {/* Brand Grid - Mobile */}
                   {BrandGrid}
 
-                  {/* Mobile Gift Card */}
-                  <div className={`${currentBrand.color} text-white p-4 sm:p-6 rounded-lg mb-6`}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-                        <img 
-                          src={brandLogos[selectedBrand]} 
-                          alt={currentBrand.name}
-                          className="h-6 w-6 sm:h-8 sm:w-8 object-contain filter brightness-0 invert shrink-0"
-                          loading="lazy"
-                        />
-                        <div className="min-w-0">
-                          <div className="text-sm font-medium truncate">{currentBrand.website}</div>
-                          <div className="text-xs opacity-90">30 Jahre Deutsche Telekom</div>
-                          <div className="text-xs opacity-90 leading-tight">Gültig in allen Telekom Shops und auf telekom.de</div>
+                  {/* Large Mobile Gift Card - matches screenshot */}
+                  <div className={`${currentBrand.color} text-white rounded-xl p-6 mb-4`}>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="mb-4">
+                          <img 
+                            src={brandLogos[selectedBrand]} 
+                            alt={currentBrand.name}
+                            className="h-8 w-auto object-contain filter brightness-0 invert"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="text-sm font-medium mb-1">{currentBrand.website}</div>
+                        
+                        <div className="mt-8">
+                          <div className="text-sm opacity-90 mb-1">30 Jahre Deutsche Telekom</div>
+                          <div className="text-xs opacity-80 leading-relaxed">
+                            Gültig in allen Telekom Shops und auf telekom.de
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right shrink-0 ml-2">
-                        <div className="text-xs opacity-90">Geschenkkarte</div>
-                        <div className="text-xl sm:text-2xl font-bold">{currentBrand.value}</div>
+                      
+                      <div className="text-right">
+                        <div className="text-sm opacity-90 mb-1">Geschenkkarte</div>
+                        <div className="text-4xl font-bold">{currentBrand.value}</div>
                       </div>
                     </div>
                   </div>
-
-                  <h3 className="text-lg font-semibold text-pink-600 mb-2">{currentBrand.website} Geschenkkarte - {currentBrand.value}</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    30 Jahre Deutsche Telekom - Wir feiern mit großartigen Angeboten und Aktionen! Nutzen Sie diese 
-                    Geschenkkarte in jedem Telekom Shop oder online auf telekom.de. Nur im Juni verfügbar.
-                  </p>
-                  
-                  <ul className="text-sm text-gray-600 space-y-1 mb-8">
-                    <li>• Wert: {currentBrand.value}</li>
-                    <li>• Gültig für 1 Jahr ab Kaufdatum</li>
-                    <li>• Kann für alle Telekom Produkte oder Dienstleistungen verwendet werden</li>
-                  </ul>
                 </div>
 
                 {/* Delivery Options Section - Mobile */}
-                <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-pink-600 mb-6">Lieferoption wählen</h2>
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-pink-600 mb-4">Lieferoption wählen</h2>
                   
                   {/* Warning Box - Only show when E-Mail is clicked */}
                   {showEmailError && (
