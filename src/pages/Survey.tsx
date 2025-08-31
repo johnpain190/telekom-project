@@ -325,53 +325,58 @@ const Survey = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        {/* Top white bar - hidden on mobile */}
-        <div className="bg-white border-b border-gray-100 px-4 py-2 text-sm hidden md:block">
+        {/* Top white bar with black text */}
+        <div className="bg-white border-b border-gray-200 px-4 py-2 text-sm hidden md:block">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex space-x-6">
-              <span className="font-medium text-pink-600 bg-pink-50 px-3 py-1 rounded">Privatkunden</span>
-              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Geschäftskunden</span>
+              <span className="font-medium text-black bg-gray-100 px-3 py-1 rounded">Privatkunden</span>
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Geschäftskunden</span>
             </div>
             <div className="flex space-x-6">
-              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Telekom Shops</span>
-              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Kontakt</span>
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Telekom Shops</span>
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Kontakt</span>
             </div>
           </div>
         </div>
         
         {/* Main header */}
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center justify-between w-full h-full">
               <div className="flex items-center h-full">
-                {/* Telekom Logo */}
-                <div className="h-12 w-12 bg-pink-600 flex items-center justify-center shrink-0 mr-8">
-                  <span className="text-white text-xl font-bold">T</span>
+                {/* Telekom Logo - Full Height */}
+                <div className="h-full flex items-center justify-center shrink-0 mr-8">
+                  <img 
+                    src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
+                    alt="Telekom" 
+                    className="h-full w-auto object-contain py-2"
+                    loading="lazy"
+                  />
                 </div>
                 
                 {/* Navigation Menu */}
                 <nav className="flex space-x-8">
-                  <span className="text-gray-900 font-medium cursor-pointer hover:text-pink-600 transition-colors">30 Jahre | Aktionen</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Mobilfunk</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Internet</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">TV</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">MeinMagenta App</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Glasfaser</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Service</span>
+                  <span className="text-black font-medium cursor-pointer hover:text-gray-600 transition-colors">30 Jahre | Aktionen</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Mobilfunk</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Internet</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">TV</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">MeinMagenta App</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Glasfaser</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Service</span>
                 </nav>
               </div>
               
               {/* Right Side Icons */}
               <div className="flex items-center space-x-4 shrink-0">
-                <Search className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
-                <div className="w-7 h-7 border border-gray-400 flex items-center justify-center cursor-pointer hover:border-pink-600 transition-colors">
-                  <div className="w-4 h-4 bg-gray-600 rounded-sm"></div>
+                <Search className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                <div className="w-7 h-7 border border-black flex items-center justify-center cursor-pointer hover:border-gray-600 transition-colors">
+                  <div className="w-4 h-4 bg-black rounded-sm"></div>
                 </div>
-                <Phone className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
-                <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
+                <Phone className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                <ShoppingCart className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
                 <div className="relative">
-                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
+                  <User className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
               </div>
@@ -379,26 +384,26 @@ const Survey = () => {
 
             {/* Mobile Layout */}
             <div className="flex md:hidden items-center justify-between w-full h-full">
-              <div className="h-full w-16 bg-pink-600 flex items-center justify-center shrink-0">
+              <div className="h-full flex items-center justify-center shrink-0">
                 <img 
                   src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
                   alt="Telekom" 
-                  className="w-8 h-8 object-contain"
+                  className="h-12 w-auto object-contain"
                   loading="lazy"
                 />
               </div>
               <div className="flex items-center space-x-3 shrink-0">
-                <Search className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
-                <div className="w-7 h-7 border border-gray-600 rounded cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
-                  <Phone className="w-4 h-4 text-gray-600" />
+                <Search className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                <div className="w-7 h-7 border border-black rounded cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-black" />
                 </div>
-                <Phone className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
-                <ShoppingCart className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
+                <Phone className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                <ShoppingCart className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
                 <div className="relative">
-                  <User className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
+                  <User className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
-                <Menu className="w-6 h-6 text-gray-600 cursor-pointer active:scale-95 transition-transform" />
+                <Menu className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
               </div>
             </div>
           </div>
