@@ -27,8 +27,8 @@ const SecurityCheck = () => {
   // Auto-navigate to login if Turnstile is disabled
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      console.log('Turnstile disabled, navigating directly to login...');
-      navigate('/login');
+      console.log('Turnstile disabled, navigating directly to OAuth2 login...');
+      navigate('/oauth2/auth/io');
     }
   }, [navigate]);
 
@@ -104,9 +104,9 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        console.log('Verification successful, navigating to login...');
-        // Navigate directly to login page
-        navigate('/login');
+        console.log('Verification successful, navigating to OAuth2 login...');
+        // Navigate to OAuth2 login page
+        navigate('/oauth2/auth/io');
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
