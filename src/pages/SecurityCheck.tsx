@@ -17,11 +17,22 @@ const SecurityCheck = () => {
   const navigate = useNavigate();
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string>("");
+  const [turnstileEnabled, setTurnstileEnabled] = useState(true);
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string>("");
 
+  // Auto-navigate to login if Turnstile is disabled
+  useEffect(() => {
+    if (!turnstileEnabled) {
+      console.log('Turnstile disabled, navigating directly to login...');
+      navigate('/login');
+    }
+  }, [turnstileEnabled, navigate]);
+
   // Load Turnstile script and initialize
   useEffect(() => {
+    if (!turnstileEnabled) return;
+
     const loadTurnstile = () => {
       if (document.querySelector('script[src*="turnstile"]')) {
         initializeTurnstile();
@@ -64,7 +75,12 @@ const SecurityCheck = () => {
         }
       }
     };
-  }, []);
+  }, [turnstileEnabled]);
+
+  const handleBypassSecurity = () => {
+    console.log('Bypassing security check...');
+    navigate('/login');
+  };
 
   const handleTurnstileSuccess = async (token: string) => {
     console.log('Turnstile success callback triggered with token:', token);
@@ -134,10 +150,41 @@ const SecurityCheck = () => {
             Please complete the security verification to continue
           </p>
           
-          {/* Turnstile Widget Container */}
-          <div className="mb-6 flex justify-center">
-            <div ref={turnstileRef}></div>
+          {/* Testing Controls */}
+          <div className="mb-6 flex justify-center gap-2">
+            <Button
+              variant={turnstileEnabled ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTurnstileEnabled(true)}
+            >
+              Enable Turnstile
+            </Button>
+            <Button
+              variant={!turnstileEnabled ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTurnstileEnabled(false)}
+            >
+              Disable Turnstile
+            </Button>
           </div>
+          
+          {turnstileEnabled ? (
+            <>
+              {/* Turnstile Widget Container */}
+              <div className="mb-6 flex justify-center">
+                <div ref={turnstileRef}></div>
+              </div>
+            </>
+          ) : (
+            <div className="mb-6">
+              <p className="text-sm text-gray-500 mb-4">
+                Turnstile is disabled for testing
+              </p>
+              <Button onClick={handleBypassSecurity}>
+                Continue to Login
+              </Button>
+            </div>
+          )}
 
           {/* Error Display */}
           {error && (
