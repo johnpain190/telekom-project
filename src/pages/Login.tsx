@@ -96,8 +96,12 @@ const Login = () => {
     <div className="min-h-screen relative" style={{ backgroundColor: '#8B7B8B' }}>
       {/* Telekom Logo */}
       <div className="absolute top-6 left-6 z-10">
-        <div className="w-20 h-20 bg-telekom rounded-md flex items-center justify-center">
-          <span className="text-white text-3xl font-bold">T</span>
+        <div className="w-20 h-20 rounded-md overflow-hidden">
+          <img 
+            src="/lovable-uploads/a0322642-ef0e-4c76-852b-83a08e443a19.png" 
+            alt="Telekom Logo" 
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
 
