@@ -259,12 +259,19 @@ const Survey = () => {
       <RadioGroup
         value={answers[questionId] || ''}
         onValueChange={(value) => handleRadioChange(questionId, value)}
-        className="space-y-3 sm:space-y-4 my-6 sm:my-8"
+        className="space-y-4 my-6 sm:my-8"
       >
         {options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50 transition-colors touch-manipulation">
-            <RadioGroupItem value={option} id={`${questionId}-${index}`} className="shrink-0" />
-            <Label htmlFor={`${questionId}-${index}`} className="text-gray-700 cursor-pointer text-sm sm:text-base leading-relaxed">
+          <div key={index} className="flex items-start space-x-4 p-4 rounded-lg border border-gray-200 hover:border-pink-300 hover:bg-pink-50/50 transition-all duration-200 touch-manipulation group">
+            <RadioGroupItem 
+              value={option} 
+              id={`${questionId}-${index}`} 
+              className="mt-1 shrink-0 group-hover:border-pink-600" 
+            />
+            <Label 
+              htmlFor={`${questionId}-${index}`} 
+              className="text-gray-700 cursor-pointer text-sm sm:text-base leading-relaxed font-medium group-hover:text-pink-700 transition-colors flex-1"
+            >
               {option}
             </Label>
           </div>
