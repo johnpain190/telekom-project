@@ -325,16 +325,16 @@ const Survey = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        {/* Top pink bar - hidden on mobile */}
-        <div className="bg-pink-600 text-white px-4 py-2 text-sm hidden md:block">
+        {/* Top white bar - hidden on mobile */}
+        <div className="bg-white border-b border-gray-100 px-4 py-2 text-sm hidden md:block">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex space-x-6">
-              <span className="font-medium text-white">Privatkunden</span>
-              <span className="text-pink-200 hover:text-white cursor-pointer transition-colors">Geschäftskunden</span>
+              <span className="font-medium text-pink-600 bg-pink-50 px-3 py-1 rounded">Privatkunden</span>
+              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Geschäftskunden</span>
             </div>
             <div className="flex space-x-6">
-              <span className="hover:text-pink-200 cursor-pointer transition-colors">Telekom Shops</span>
-              <span className="hover:text-pink-200 cursor-pointer transition-colors">Kontakt</span>
+              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Telekom Shops</span>
+              <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Kontakt</span>
             </div>
           </div>
         </div>
@@ -344,29 +344,29 @@ const Survey = () => {
           <div className="flex items-center justify-between h-16">
             {/* Desktop Layout */}
             <div className="hidden md:flex items-center justify-between w-full h-full">
-              <div className="flex items-center space-x-6 xl:space-x-8 h-full">
-                <div className="h-full w-16 bg-pink-600 flex items-center justify-center shrink-0">
-                  <img 
-                    src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
-                    alt="Telekom" 
-                    className="w-8 h-8 object-contain"
-                    loading="lazy"
-                  />
+              <div className="flex items-center h-full">
+                {/* Telekom Logo */}
+                <div className="h-12 w-12 bg-pink-600 flex items-center justify-center shrink-0 mr-8">
+                  <span className="text-white text-xl font-bold">T</span>
                 </div>
-                <nav className="flex space-x-4 lg:space-x-6 overflow-x-auto">
-                  <span className="text-pink-600 font-medium whitespace-nowrap">30 Jahre | Aktionen</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Mobilfunk</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Internet</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">TV</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">MeinMagenta App</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Glasfaser</span>
-                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer whitespace-nowrap transition-colors">Service</span>
+                
+                {/* Navigation Menu */}
+                <nav className="flex space-x-8">
+                  <span className="text-gray-900 font-medium cursor-pointer hover:text-pink-600 transition-colors">30 Jahre | Aktionen</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Mobilfunk</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Internet</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">TV</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">MeinMagenta App</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Glasfaser</span>
+                  <span className="text-gray-600 hover:text-pink-600 cursor-pointer transition-colors">Service</span>
                 </nav>
               </div>
-              <div className="flex items-center space-x-3 lg:space-x-4 shrink-0">
+              
+              {/* Right Side Icons */}
+              <div className="flex items-center space-x-4 shrink-0">
                 <Search className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
-                <div className="w-6 h-6 border border-gray-600 rounded cursor-pointer hover:border-pink-600 transition-colors flex items-center justify-center">
-                  <Phone className="w-3 h-3 text-gray-600" />
+                <div className="w-7 h-7 border border-gray-400 flex items-center justify-center cursor-pointer hover:border-pink-600 transition-colors">
+                  <div className="w-4 h-4 bg-gray-600 rounded-sm"></div>
                 </div>
                 <Phone className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
                 <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-pink-600 transition-colors" />
