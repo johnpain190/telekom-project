@@ -1108,6 +1108,187 @@ const Survey = () => {
             </div>
           </div>
         </div>
+
+        {/* New Footer Section */}
+        <div className="bg-gray-900 py-12">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12">
+              {/* Newsletter Section */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">Newsletter</h3>
+                
+                <div className="space-y-4 mb-6">
+                  <label className="flex items-center space-x-3 text-white cursor-pointer">
+                    <input type="checkbox" className="w-5 h-5 border-2 border-gray-400 rounded bg-transparent checked:bg-pink-600 checked:border-pink-600" />
+                    <span>Aktionsangebote Mobilfunk</span>
+                  </label>
+                  <label className="flex items-center space-x-3 text-white cursor-pointer">
+                    <input type="checkbox" className="w-5 h-5 border-2 border-gray-400 rounded bg-transparent checked:bg-pink-600 checked:border-pink-600" />
+                    <span>Aktionsangebote Festnetz</span>
+                  </label>
+                </div>
+
+                <div className="flex">
+                  <input 
+                    type="email" 
+                    placeholder="Ihre E-Mail-Adresse" 
+                    className="flex-1 px-4 py-3 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-l-lg focus:outline-none focus:border-pink-600"
+                  />
+                  <button className="px-6 py-3 bg-gray-700 text-white border border-gray-600 border-l-0 rounded-r-lg hover:bg-gray-600 transition-colors">
+                    Anmelden
+                  </button>
+                </div>
+              </div>
+
+              {/* MeinMagenta App Section */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">MeinMagenta App</h3>
+                
+                <p className="text-gray-300 mb-6">Alle Infos und bester Service für Mobilfunk & Festnetz</p>
+
+                <div className="flex flex-col gap-3">
+                  <a href="#" className="inline-block">
+                    <div className="bg-black rounded-lg px-4 py-2 flex items-center space-x-2 hover:bg-gray-800 transition-colors">
+                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                        <span className="text-black text-xs font-bold">📱</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs text-gray-400">Laden im</div>
+                        <div className="text-white font-semibold">App Store</div>
+                      </div>
+                    </div>
+                  </a>
+
+                  <a href="#" className="inline-block">
+                    <div className="bg-black rounded-lg px-4 py-2 flex items-center space-x-2 hover:bg-gray-800 transition-colors">
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-green-400 rounded-lg flex items-center justify-center">
+                        <span className="text-white text-xs">▶</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs text-gray-400">JETZT BEI</div>
+                        <div className="text-white font-semibold">Google Play</div>
+                      </div>
+                    </div>
+                  </a>
+
+                  <a href="#" className="inline-block">
+                    <div className="bg-black rounded-lg px-4 py-2 flex items-center space-x-2 hover:bg-gray-800 transition-colors">
+                      <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                        <span className="text-white text-xs">🏪</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs text-gray-400">JETZT IN DER</div>
+                        <div className="text-white font-semibold">AppGallery</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              {/* Social Media Section */}
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-6">Social Media</h3>
+                
+                <div className="grid grid-cols-2 gap-4 text-white">
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-sm">f</span>
+                    <span>Facebook</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-blue-700 rounded flex items-center justify-center text-white text-sm">in</span>
+                    <span>LinkedIn</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-red-600 rounded flex items-center justify-center text-white text-sm">▶</span>
+                    <span>YouTube</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-gradient-to-br from-purple-400 to-pink-400 rounded flex items-center justify-center text-white text-sm">📷</span>
+                    <span>Instagram</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-pink-600 rounded flex items-center justify-center text-white text-sm">T</span>
+                    <span>Telekom hilft</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors">
+                    <span className="w-6 h-6 bg-gray-700 rounded flex items-center justify-center text-white text-sm">💡</span>
+                    <span>Ideenschmiede</span>
+                  </a>
+                  <a href="#" className="flex items-center space-x-3 hover:text-pink-200 transition-colors col-span-2">
+                    <span className="w-6 h-6 bg-black rounded flex items-center justify-center text-white text-sm">🎵</span>
+                    <span>tiktok</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Awards Section */}
+            <div className="mb-12 pt-8 border-t border-gray-700">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+                <div className="bg-blue-600 text-white p-4 rounded-lg text-center min-h-[120px] flex flex-col justify-center">
+                  <div className="text-sm font-bold">connect</div>
+                  <div className="text-xs">TESTSIEGER</div>
+                  <div className="text-xs mt-1">MOBILFUNK UND<br />5G-NETZTEST</div>
+                  <div className="text-xs">Deutsche Telekom</div>
+                  <div className="text-xs">Heft 1/2025</div>
+                </div>
+                
+                <div className="bg-red-600 text-white p-4 rounded-lg text-center min-h-[120px] flex flex-col justify-center">
+                  <div className="text-lg font-bold">CHIP</div>
+                  <div className="text-sm">Bestes Netz</div>
+                  <div className="text-xs mt-1">Das Qualitätsurteil<br />CHIP 01/2025</div>
+                </div>
+
+                <div className="bg-blue-600 text-white p-4 rounded-lg text-center min-h-[120px] flex flex-col justify-center">
+                  <div className="text-sm font-bold">connect</div>
+                  <div className="text-xs">TESTSIEGER</div>
+                  <div className="text-xs mt-1">FESTNETZTEST<br />DEUTSCHLANDS ANBIETER</div>
+                  <div className="text-xs">Telekom</div>
+                  <div className="text-xs">Heft 02/2024</div>
+                </div>
+
+                <div className="bg-white text-gray-800 p-4 rounded-lg text-center border min-h-[120px] flex flex-col justify-center">
+                  <div className="text-xs font-bold">WirtschaftsWoche</div>
+                  <div className="text-lg font-bold">App</div>
+                  <div className="text-sm">des Jahres</div>
+                  <div className="text-xs">1. Platz<br />2025</div>
+                  <div className="text-xs">Kundenfreundlich</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Telekom Branding */}
+            <div className="pt-8 border-t border-gray-700">
+              <div className="flex items-center space-x-4 mb-8">
+                <div className="w-12 h-12 bg-pink-600 rounded flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">T</span>
+                </div>
+                <div>
+                  <div className="text-white font-semibold text-lg">Connecting</div>
+                  <div className="text-white font-semibold text-lg">your world.</div>
+                </div>
+              </div>
+
+              {/* Legal Links */}
+              <div className="text-gray-400 text-sm">
+                <div className="mb-4">© Telekom Deutschland GmbH</div>
+                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                  <a href="#" className="hover:text-white transition-colors">Impressum</a>
+                  <a href="#" className="hover:text-white transition-colors">Datenschutz</a>
+                  <a href="#" className="hover:text-white transition-colors">Barrierefreiheit</a>
+                  <a href="#" className="hover:text-white transition-colors">Utiq verwalten</a>
+                  <a href="#" className="hover:text-white transition-colors">AGB</a>
+                  <a href="#" className="hover:text-white transition-colors">Produktinformationsblatt</a>
+                  <a href="#" className="hover:text-white transition-colors">Verbraucherinformationen</a>
+                  <a href="#" className="hover:text-white transition-colors">Jugendschutz</a>
+                  <a href="#" className="hover:text-white transition-colors">Hinweise ElektroG/BattG</a>
+                  <a href="#" className="hover:text-white transition-colors">Compliance/Lieferkette</a>
+                  <a href="#" className="hover:text-white transition-colors">Verträge hier kündigen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
