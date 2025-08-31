@@ -325,94 +325,87 @@ const Survey = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        {/* Desktop Layout - Combined header with full height logo */}
-        <div className="hidden md:block">
-          {/* Top white bar with black text */}
-          <div className="bg-white border-b border-gray-200 px-4 py-2 text-sm">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-              <div className="flex space-x-6 ml-24">
-                <span className="font-medium text-black bg-gray-100 px-3 py-1 rounded">Privatkunden</span>
-                <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Geschäftskunden</span>
-              </div>
-              <div className="flex space-x-6">
-                <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Telekom Shops</span>
-                <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Kontakt</span>
-              </div>
+        {/* Top white bar with black text */}
+        <div className="bg-white border-b border-gray-200 px-4 py-2 text-sm hidden md:block">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex space-x-6">
+              <span className="font-medium text-black bg-gray-100 px-3 py-1 rounded">Privatkunden</span>
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Geschäftskunden</span>
             </div>
-          </div>
-          
-          {/* Main header */}
-          <div className="relative">
-            {/* Full height logo positioned absolutely */}
-            <div className="absolute left-4 top-0 bottom-0 z-10 flex items-center">
-              <div className="h-20 flex items-center justify-center mr-8">
-                <img 
-                  src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
-                  alt="Telekom" 
-                  className="h-16 w-auto object-contain"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-            
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="flex items-center justify-between h-20">
-                <div className="flex items-center h-full w-full">
-                  {/* Spacer for logo */}
-                  <div className="w-24 shrink-0"></div>
-                  
-                  {/* Navigation Menu */}
-                  <nav className="flex space-x-8">
-                    <span className="text-black font-medium cursor-pointer hover:text-gray-600 transition-colors">30 Jahre | Aktionen</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Mobilfunk</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Internet</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">TV</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">MeinMagenta App</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Glasfaser</span>
-                    <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Service</span>
-                  </nav>
-                  
-                  {/* Right Side Icons */}
-                  <div className="flex items-center space-x-4 shrink-0 ml-auto">
-                    <Search className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
-                    <div className="w-7 h-7 border border-black flex items-center justify-center cursor-pointer hover:border-gray-600 transition-colors">
-                      <div className="w-4 h-4 bg-black rounded-sm"></div>
-                    </div>
-                    <Phone className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
-                    <ShoppingCart className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
-                    <div className="relative">
-                      <User className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="flex space-x-6">
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Telekom Shops</span>
+              <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Kontakt</span>
             </div>
           </div>
         </div>
+        
+        {/* Main header */}
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-20">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center justify-between w-full h-full">
+              <div className="flex items-center h-full">
+                {/* Telekom Logo - Full Height */}
+                <div className="h-full flex items-center justify-center shrink-0 mr-8">
+                  <img 
+                    src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
+                    alt="Telekom" 
+                    className="h-full w-auto object-contain py-2"
+                    loading="lazy"
+                  />
+                </div>
+                
+                {/* Navigation Menu */}
+                <nav className="flex space-x-8">
+                  <span className="text-black font-medium cursor-pointer hover:text-gray-600 transition-colors">30 Jahre | Aktionen</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Mobilfunk</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Internet</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">TV</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">MeinMagenta App</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Glasfaser</span>
+                  <span className="text-black hover:text-gray-600 cursor-pointer transition-colors">Service</span>
+                </nav>
+              </div>
+              
+              {/* Right Side Icons */}
+              <div className="flex items-center space-x-4 shrink-0">
+                <Search className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                <div className="w-7 h-7 border border-black flex items-center justify-center cursor-pointer hover:border-gray-600 transition-colors">
+                  <div className="w-4 h-4 bg-black rounded-sm"></div>
+                </div>
+                <Phone className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                <ShoppingCart className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                <div className="relative">
+                  <User className="w-5 h-5 text-black cursor-pointer hover:text-gray-600 transition-colors" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+            </div>
 
-        {/* Mobile Layout */}
-        <div className="flex md:hidden items-center justify-between w-full h-16 px-4">
-          <div className="h-full flex items-center justify-center shrink-0">
-            <img 
-              src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
-              alt="Telekom" 
-              className="h-12 w-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-          <div className="flex items-center space-x-3 shrink-0">
-            <Search className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
-            <div className="w-7 h-7 border border-black rounded cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
-              <Phone className="w-4 h-4 text-black" />
+            {/* Mobile Layout */}
+            <div className="flex md:hidden items-center justify-between w-full h-full">
+              <div className="h-full flex items-center justify-center shrink-0">
+                <img 
+                  src="/lovable-uploads/3a50a6ae-c8a9-4e79-8237-5c8031a412fd.png" 
+                  alt="Telekom" 
+                  className="h-12 w-auto object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <div className="flex items-center space-x-3 shrink-0">
+                <Search className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                <div className="w-7 h-7 border border-black rounded cursor-pointer active:scale-95 transition-transform flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-black" />
+                </div>
+                <Phone className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                <ShoppingCart className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                <div className="relative">
+                  <User className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <Menu className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
+              </div>
             </div>
-            <Phone className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
-            <ShoppingCart className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
-            <div className="relative">
-              <User className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
-            </div>
-            <Menu className="w-6 h-6 text-black cursor-pointer active:scale-95 transition-transform" />
           </div>
         </div>
       </header>
