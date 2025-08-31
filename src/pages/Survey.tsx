@@ -496,9 +496,10 @@ const Survey = () => {
                   </div>
                 </div>
 
-                {/* Step 1: Brand Selection - Mobile */}
-                {rewardStep === 1 && (
-                  <div className="px-4 py-6">
+                {/* Single Scrolling Page - Mobile */}
+                <div className="px-4 py-6">
+                  {/* Brand Selection Section */}
+                  <div className="mb-8">
                     <h2 className="text-xl font-semibold text-pink-600 mb-6">Marke auswählen</h2>
                     
                     {/* Brand Grid - Mobile */}
@@ -562,25 +563,15 @@ const Survey = () => {
                       Geschenkkarte in jedem Telekom Shop oder online auf telekom.de. Nur im Juni verfügbar.
                     </p>
                     
-                    <ul className="text-sm text-gray-600 space-y-1 mb-6">
+                    <ul className="text-sm text-gray-600 space-y-1 mb-8">
                       <li>• Wert: {currentBrand.value}</li>
                       <li>• Gültig für 1 Jahr ab Kaufdatum</li>
                       <li>• Kann für alle Telekom Produkte oder Dienstleistungen verwendet werden</li>
                     </ul>
-
-                    {/* Continue Button */}
-                    <button 
-                      onClick={() => setRewardStep(2)}
-                      className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
-                    >
-                      Weiter
-                    </button>
                   </div>
-                )}
 
-                {/* Step 2: Delivery Options - Mobile */}
-                {rewardStep === 2 && (
-                  <div className="px-4 py-6">
+                  {/* Delivery Options Section - Mobile */}
+                  <div className="mb-8">
                     <h2 className="text-xl font-semibold text-pink-600 mb-6">Lieferoption wählen</h2>
                     
                     {/* Warning Box - Only show when E-Mail is clicked */}
@@ -645,113 +636,85 @@ const Survey = () => {
                       </div>
                     </button>
 
-                    {/* Navigation Buttons */}
-                    <div className="flex flex-col gap-3">
-                      {/* Back Button */}
-                      <button 
-                        onClick={() => setRewardStep(1)}
-                        className="w-full py-3 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-600 hover:border-pink-600 hover:text-pink-600 transition-colors"
-                      >
-                        Zurück
-                      </button>
+                    {/* Address Selection - Show when home delivery is selected */}
+                    {selectedDelivery === 'home' && (
+                      <>
+                        <div className="text-sm font-semibold text-pink-600 mb-4">Empfänger auswählen:</div>
 
-                      {/* Weiter Button - Disabled if no delivery selected */}
+                        {/* Info Box */}
+                        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                          <div className="flex items-start space-x-2">
+                            <div className="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0 mt-0.5"></div>
+                            <div className="text-sm text-blue-700">
+                              Wir senden Ihnen eine E-Mail mit den Versandinformationen und den Details Ihrer 
+                              Bestellung, sobald Ihre Adresse erfolgreich überprüft wurde und Sie zur Lieferung 
+                              berechtigt sind.
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Address Options */}
+                        <button
+                          onClick={() => handleAddressSelect('meine')}
+                          className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
+                            selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-6 h-6 border-2 border-pink-600 rounded-full ${
+                              selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
+                            } flex items-center justify-center`}>
+                              {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                            </div>
+                            <div className="text-left">
+                              <div className="font-semibold text-gray-800 flex items-center">
+                                <span className="mr-2">👤</span>
+                                Meine Adresse
+                              </div>
+                              <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
+                            </div>
+                          </div>
+                        </button>
+
+                        {/* Grayed out option */}
+                        <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200"></div>
+                            <div className="text-left">
+                              <div className="font-semibold text-gray-500 flex items-center">
+                                <span className="mr-2">👥</span>
+                                Adresse einer anderen Person
+                              </div>
+                              <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Continue Button */}
+                    {selectedAddress === 'meine' ? (
                       <button 
-                        onClick={() => selectedDelivery === 'home' ? setRewardStep(3) : null}
-                        className={`w-full py-3 rounded-lg font-semibold text-lg transition-colors ${
-                          selectedDelivery === 'home' 
-                            ? 'bg-pink-600 hover:bg-pink-700 text-white' 
-                            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                        }`}
-                        disabled={selectedDelivery !== 'home'}
+                        onClick={handleWeiterClick}
+                        className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
                       >
                         Weiter
                       </button>
-                    </div>
+                    ) : (
+                      <button 
+                        className="w-full bg-gray-300 text-gray-600 cursor-not-allowed py-3 rounded-lg font-semibold text-lg"
+                        disabled
+                      >
+                        Weiter
+                      </button>
+                    )}
 
                     <p className="text-xs text-gray-500 mt-4 text-center">
                       Die Geschenkkarte wird per Post versendet und kann je nach Anbieter als Plastikkarte, 
                       ausgedruckter Gutschein oder in einer Geschenkverpackung ankommen.
                     </p>
                   </div>
-                )}
-
-                {/* Step 3: Address Selection - Mobile */}
-                {rewardStep === 3 && (
-                  <div className="px-4 py-6">
-                    <h2 className="text-xl font-semibold text-pink-600 mb-4">Empfänger auswählen</h2>
-                    
-                    {/* Info Box */}
-                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
-                      <div className="flex items-start space-x-2">
-                        <div className="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0 mt-0.5"></div>
-                        <div className="text-sm text-blue-700">
-                          Wir senden Ihnen eine E-Mail mit den Versandinformationen und den Details Ihrer 
-                          Bestellung, sobald Ihre Adresse erfolgreich überprüft wurde und Sie zur Lieferung 
-                          berechtigt sind.
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Address Options */}
-                    <button
-                      onClick={() => handleAddressSelect('meine')}
-                      className={`w-full border-2 rounded-lg p-4 mb-4 transition-colors ${
-                        selectedAddress === 'meine' ? 'border-pink-600 bg-pink-50' : 'border-gray-300 hover:border-pink-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-6 h-6 border-2 border-pink-600 rounded-full ${
-                          selectedAddress === 'meine' ? 'bg-pink-600' : 'bg-white'
-                        } flex items-center justify-center`}>
-                          {selectedAddress === 'meine' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                        </div>
-                        <div className="text-left">
-                          <div className="font-semibold text-gray-800 flex items-center">
-                            <span className="mr-2">👤</span>
-                            Meine Adresse
-                          </div>
-                          <div className="text-sm text-gray-600">Senden Sie die Geschenkkarte an meine Lieferadresse</div>
-                        </div>
-                      </div>
-                    </button>
-
-                    {/* Grayed out option */}
-                    <div className="w-full border-2 border-gray-200 rounded-lg p-4 mb-6 bg-gray-100 opacity-60 cursor-not-allowed">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-6 h-6 border-2 border-gray-400 rounded-full bg-gray-200"></div>
-                        <div className="text-left">
-                          <div className="font-semibold text-gray-500 flex items-center">
-                            <span className="mr-2">👥</span>
-                            Adresse einer anderen Person
-                          </div>
-                          <div className="text-sm text-gray-400">Senden Sie die Geschenkkarte direkt an den Empfänger</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Navigation Buttons */}
-                    <div className="flex flex-col gap-3">
-                      {/* Back Button */}
-                      <button 
-                        onClick={() => setRewardStep(2)}
-                        className="w-full py-3 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-600 hover:border-pink-600 hover:text-pink-600 transition-colors"
-                      >
-                        Zurück
-                      </button>
-
-                      {/* Final Continue Button */}
-                      {selectedAddress === 'meine' && (
-                        <button 
-                          onClick={handleWeiterClick}
-                          className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-lg font-semibold text-lg transition-colors"
-                        >
-                          Weiter
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
 
               {/* Desktop Layout (existing) */}
