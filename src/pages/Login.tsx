@@ -99,9 +99,9 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen overflow-hidden">
       {/* Mobile Layout */}
-      <div className="md:hidden min-h-screen bg-background flex flex-col px-4 py-6">
+      <div className="md:hidden h-screen bg-background flex flex-col px-4 py-6 overflow-y-auto">
         {/* Telekom Logo */}
         <div className="mb-8">
           <div className="w-12 h-12 bg-primary rounded-sm flex items-center justify-center">
