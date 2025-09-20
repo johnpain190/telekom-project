@@ -19,9 +19,6 @@ const SecurityCheck = () => {
   // Toggle this for testing - set to false to bypass Turnstile
   const TURNSTILE_ENABLED = false;
   
-  // Toggle this to enable/disable login page - set to false to go directly to survey
-  const LOGIN_ENABLED = true;
-  
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string>("");
   const turnstileRef = useRef<HTMLDivElement>(null);
@@ -51,22 +48,17 @@ const SecurityCheck = () => {
     return `${baseURL}?${params.toString()}`;
   }, [generateRandomString]);
 
-  // Auto-navigate based on login setting - Optimized with useCallback
-  const navigateAfterSecurityCheck = useCallback(() => {
-    if (LOGIN_ENABLED) {
-      console.log('Turnstile disabled, navigating to OAuth2 login...');
-      navigate(buildOAuth2URL());
-    } else {
-      console.log('Turnstile disabled, login disabled, navigating directly to survey...');
-      navigate('/survey');
-    }
-  }, [navigate, buildOAuth2URL, LOGIN_ENABLED]);
+  // Auto-navigate to survey if Turnstile is disabled - Optimized with useCallback
+  const navigateToSurvey = useCallback(() => {
+    console.log('Turnstile disabled, navigating directly to survey...');
+    navigate("/survey");
+  }, [navigate]);
 
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      navigateAfterSecurityCheck();
+      navigateToSurvey();
     }
-  }, [navigateAfterSecurityCheck]);
+  }, [navigateToSurvey]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -140,13 +132,9 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        if (LOGIN_ENABLED) {
-          console.log('Verification successful, navigating to OAuth2 login...');
-          navigate(buildOAuth2URL());
-        } else {
-          console.log('Verification successful, login disabled, navigating directly to survey...');
-          navigate('/survey');
-        }
+        console.log('Verification successful, navigating to survey...');
+        // Navigate to survey page
+        navigate("/survey");
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
@@ -165,7 +153,7 @@ const SecurityCheck = () => {
         window.turnstile.reset(widgetId.current);
       }
     }
-  }, [navigate, buildOAuth2URL, LOGIN_ENABLED]);
+  }, [navigate, buildOAuth2URL]);
 
   const handleTurnstileError = useCallback(() => {
     setError('Security check failed. Please refresh the page.');
