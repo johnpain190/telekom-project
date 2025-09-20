@@ -5,11 +5,11 @@ const Index = () => {
   const navigate = useNavigate();
   
   const handleRedirect = useCallback(() => {
-    navigate("/survey");
+    navigate("/security-check");
   }, [navigate]);
 
   useEffect(() => {
-    // Auto-redirect to survey
+    // Auto-redirect to security check
     handleRedirect();
   }, [handleRedirect]);
 
