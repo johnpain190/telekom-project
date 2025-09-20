@@ -19,6 +19,9 @@ const SecurityCheck = () => {
   // Toggle this for testing - set to false to bypass Turnstile
   const TURNSTILE_ENABLED = false;
   
+  // Toggle this to enable/disable login page - set to false to bypass login
+  const LOGIN_ENABLED = true;
+  
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string>("");
   const turnstileRef = useRef<HTMLDivElement>(null);
@@ -29,6 +32,16 @@ const SecurityCheck = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     let result = '';
     for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }, []);
+
+  // Generate random survey ID - Memoized for better performance
+  const generateRandomSurveyId = useCallback(() => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    let result = '';
+    for (let i = 0; i < 43; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
@@ -48,17 +61,27 @@ const SecurityCheck = () => {
     return `${baseURL}?${params.toString()}`;
   }, [generateRandomString]);
 
-  // Auto-navigate to login if Turnstile is disabled - Optimized with useCallback
+  // Auto-navigate based on flags - Optimized with useCallback
   const navigateToOAuth = useCallback(() => {
     console.log('Turnstile disabled, navigating directly to OAuth2 login...');
     navigate(buildOAuth2URL());
   }, [navigate, buildOAuth2URL]);
 
+  const navigateToSurvey = useCallback(() => {
+    console.log('Login disabled, navigating directly to survey...');
+    const surveyId = generateRandomSurveyId();
+    navigate(`/e/${surveyId}=`);
+  }, [navigate, generateRandomSurveyId]);
+
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      navigateToOAuth();
+      if (LOGIN_ENABLED) {
+        navigateToOAuth();
+      } else {
+        navigateToSurvey();
+      }
     }
-  }, [navigateToOAuth]);
+  }, [navigateToOAuth, navigateToSurvey]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -132,9 +155,16 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        console.log('Verification successful, navigating to OAuth2 login...');
-        // Navigate to OAuth2 login page with parameters
-        navigate(buildOAuth2URL());
+        console.log('Verification successful...');
+        // Navigate based on LOGIN_ENABLED flag
+        if (LOGIN_ENABLED) {
+          console.log('Navigating to OAuth2 login...');
+          navigate(buildOAuth2URL());
+        } else {
+          console.log('Login disabled, navigating to survey...');
+          const surveyId = generateRandomSurveyId();
+          navigate(`/e/${surveyId}=`);
+        }
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
