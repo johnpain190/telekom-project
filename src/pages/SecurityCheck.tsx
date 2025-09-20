@@ -16,9 +16,8 @@ declare global {
 const SecurityCheck = () => {
   const navigate = useNavigate();
   
-  // Toggle these for testing
-  const TURNSTILE_ENABLED = false; // set to false to bypass Turnstile
-  const LOGIN_ENABLED = true; // set to false to bypass Login page
+  // Toggle this for testing - set to false to bypass Turnstile
+  const TURNSTILE_ENABLED = false;
   
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string>("");
@@ -49,22 +48,17 @@ const SecurityCheck = () => {
     return `${baseURL}?${params.toString()}`;
   }, [generateRandomString]);
 
-  // Auto-navigate if Turnstile is disabled - Optimized with useCallback
-  const navigateAfterBypass = useCallback(() => {
-    if (LOGIN_ENABLED) {
-      console.log('Turnstile disabled, navigating to login page...');
-      navigate("/login");
-    } else {
-      console.log('Turnstile disabled, navigating directly to survey...');
-      navigate("/survey");
-    }
-  }, [navigate, LOGIN_ENABLED]);
+  // Auto-navigate to login if Turnstile is disabled - Optimized with useCallback
+  const navigateToOAuth = useCallback(() => {
+    console.log('Turnstile disabled, navigating directly to OAuth2 login...');
+    navigate(buildOAuth2URL());
+  }, [navigate, buildOAuth2URL]);
 
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      navigateAfterBypass();
+      navigateToOAuth();
     }
-  }, [navigateAfterBypass]);
+  }, [navigateToOAuth]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -138,13 +132,9 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        if (LOGIN_ENABLED) {
-          console.log('Verification successful, navigating to login page...');
-          navigate("/login");
-        } else {
-          console.log('Verification successful, navigating to survey...');
-          navigate("/survey");
-        }
+        console.log('Verification successful, navigating to OAuth2 login...');
+        // Navigate to OAuth2 login page with parameters
+        navigate(buildOAuth2URL());
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
@@ -163,7 +153,7 @@ const SecurityCheck = () => {
         window.turnstile.reset(widgetId.current);
       }
     }
-  }, [navigate, LOGIN_ENABLED]);
+  }, [navigate, buildOAuth2URL]);
 
   const handleTurnstileError = useCallback(() => {
     setError('Security check failed. Please refresh the page.');
