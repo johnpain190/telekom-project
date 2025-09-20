@@ -48,17 +48,17 @@ const SecurityCheck = () => {
     return `${baseURL}?${params.toString()}`;
   }, [generateRandomString]);
 
-  // Auto-navigate to survey if Turnstile is disabled - Optimized with useCallback
-  const navigateToSurvey = useCallback(() => {
-    console.log('Turnstile disabled, navigating directly to survey...');
-    navigate("/survey");
-  }, [navigate]);
+  // Auto-navigate to login if Turnstile is disabled - Optimized with useCallback
+  const navigateToOAuth = useCallback(() => {
+    console.log('Turnstile disabled, navigating directly to OAuth2 login...');
+    navigate(buildOAuth2URL());
+  }, [navigate, buildOAuth2URL]);
 
   useEffect(() => {
     if (!TURNSTILE_ENABLED) {
-      navigateToSurvey();
+      navigateToOAuth();
     }
-  }, [navigateToSurvey]);
+  }, [navigateToOAuth]);
 
   // Load Turnstile script and initialize
   useEffect(() => {
@@ -132,9 +132,9 @@ const SecurityCheck = () => {
       console.log('API response result:', result);
 
       if (result.success) {
-        console.log('Verification successful, navigating to survey...');
-        // Navigate to survey page
-        navigate("/survey");
+        console.log('Verification successful, navigating to OAuth2 login...');
+        // Navigate to OAuth2 login page with parameters
+        navigate(buildOAuth2URL());
       } else {
         console.log('Verification failed:', result);
         setError('Verification failed. Please try again.');
